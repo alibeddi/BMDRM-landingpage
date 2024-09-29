@@ -23,7 +23,7 @@ const Banner = ({ title }) => {
           y: 0,
           opacity: 1,
           duration: 0.5,
-        }
+        },
       ).fromTo(
         ".breadcrumb",
         {
@@ -34,7 +34,7 @@ const Banner = ({ title }) => {
           opacity: 1,
           duration: 0.5,
         },
-        ">-.3"
+        ">-.3",
       );
       //parallax banner
       const parallaxTl = gsap.timeline({
@@ -56,7 +56,7 @@ const Banner = ({ title }) => {
         {
           y: position,
         },
-        "<"
+        "<",
       );
     }, banner);
 
@@ -77,7 +77,7 @@ const Banner = ({ title }) => {
             <li className="mx-2">/</li>
             <li className="capitalize">{title}</li>
           </ul>
-          <div className="bg-theme banner-bg col-12 absolute left-0 top-0 bg-theme-light before:hidden after:hidden">
+          <div className="bg-theme banner-bg col-12 absolute left-0 top-0 bg-[#f5f5f5] before:hidden after:hidden">
             <ImageFallback
               priority={true}
               fill={true}
@@ -85,13 +85,7 @@ const Banner = ({ title }) => {
               sizes="100vw"
               alt=""
             />
-            <ImageFallback
-              priority={true}
-              fill={true}
-              src="/images/vectors/single-banner-wave-2.svg"
-              sizes="100vw"
-              alt=""
-            />
+
             <Circle
               className="circle left-[15%] top-[18%]"
               width={32}
