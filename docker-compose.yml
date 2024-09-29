@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  frontend:
+    restart: unless-stopped
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      NEXT_PUBLIC_API_URL: https://app.bmdrm.com/
+      NEXT_PUBLIC_VIDEO_ID: 3efde4b3-9f6f-4729-b99e-c58c819aef5e
+      NEXT_PUBLIC_API_KEY: f27b10e8-bf1a-4b48-a703-5f7d631d4f48
