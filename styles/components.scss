@@ -188,7 +188,7 @@
     @apply relative  overflow-hidden;
 
     &::before {
-      @apply absolute left-0 top-0 -z-[1] h-0 w-full bg-theme-light transition-all duration-300 content-[""];
+      @apply absolute left-0 top-0 -z-[1] h-0 w-full bg-[#f2edff] transition-all duration-300 content-[""];
     }
   }
 

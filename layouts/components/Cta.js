@@ -1,11 +1,20 @@
+"use client";
 import config from "@config/config.json";
 import { markdownify } from "@lib/utils/textConverter";
 import Link from "next/link";
 import Circle from "./Circle";
 import ImageFallback from "./ImageFallback";
 
-function Cta() {
+const Cta = () => {
   const { title, content, button, enable } = config.call_to_action;
+  const handleChatboxClick = () => {
+    const chatboxElement = document.querySelector(".chatbox-logo");
+    if (chatboxElement) {
+      chatboxElement.click();
+    } else {
+      console.warn("Chatbox element not found.");
+    }
+  };
   if (!enable) return;
 
   return (
@@ -19,9 +28,12 @@ function Cta() {
               "p",
               "mt-10",
             )}
-            <Link href={button.link} className="btn btn-primary mt-10">
+            <div
+              onClick={handleChatboxClick}
+              className="btn cursor-pointer btn-primary mt-10"
+            >
               Contact us now
-            </Link>
+            </div>
           </div>
           <div className="bg-theme animated-bg absolute top-0 left-0 w-full after:hidden">
             <ImageFallback
@@ -62,6 +74,6 @@ function Cta() {
       </div>
     </section>
   );
-}
+};
 
 export default Cta;
