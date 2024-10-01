@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 const Features = ({ features }) => {
   const paginationRef = useRef(null);
   return (
-    <section className="section">
+    <section className="section ">
       <div className="container text-center">
         <div className="animate">
           <p className="uppercase">{features.sub_title}</p>
@@ -20,7 +20,7 @@ const Features = ({ features }) => {
             "mt-10",
           )}
         </div>
-        <div className="animate from-right relative mt-10">
+        <div className="animate from-right  bg-white relative mt-10">
           <Swiper
             slidesPerView={1}
             pagination={{
