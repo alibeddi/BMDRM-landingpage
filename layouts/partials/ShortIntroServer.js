@@ -6,7 +6,7 @@ const ShortIntroServer = () => {
   return (
     <section className="section pt-0">
       <div className="container-xl">
-        <div className="relative px-4 py-[70px]">
+        <div className="relative px-4 py-[70px] bg-[#F5F5F5] z-[-99] rounded-md">
           <div className="text-center">
             <div className="animate">
               <p>View Demo</p>
@@ -27,30 +27,38 @@ const ShortIntroServer = () => {
           </div>
           <div className="bg-theme absolute left-0 top-0 w-full">
             <Circle
-              className="left-[10%] top-12"
+              className="hidden md:block left-[10%] top-12"
               width={32}
               height={32}
               fill={false}
             />
-            <Circle className="left-[3%] top-[30%]" width={85} height={85} />
             <Circle
-              className="bottom-[52%] left-[22%]"
+              className=" hidden md:block left-[3%] top-[30%]"
+              width={85}
+              height={85}
+            />
+            <Circle
+              className="hidden md:block bottom-[52%] left-[22%]"
               width={20}
               height={20}
             />
             <Circle
-              className="bottom-[35%] left-[15%]"
+              className="hidden md:block bottom-[35%] left-[15%]"
               width={47}
               height={47}
               fill={false}
             />
             <Circle
-              className="bottom-[6%] left-[6%]"
+              className="hidden md:block bottom-[6%] left-[6%]"
               width={62}
               height={62}
               fill={false}
             />
-            <Circle className="right-[12%] top-[12%]" width={20} height={20} />
+            <Circle
+              className=" hidden md:block right-[12%] top-[12%]"
+              width={20}
+              height={20}
+            />
             <Circle
               className="right-[2%] top-[30%]"
               width={73}
@@ -58,12 +66,16 @@ const ShortIntroServer = () => {
               fill={false}
             />
             <Circle
-              className="right-[19%] top-[50%]"
+              className="hidden md:block right-[19%] top-[50%]"
               width={37}
               height={37}
               fill={false}
             />
-            <Circle className="right-[33%] top-[52%]" width={20} height={20} />
+            <Circle
+              className="hidden md:block right-[33%] top-[52%]"
+              width={20}
+              height={20}
+            />
             <Circle
               className="bottom-[18%] right-[5%]"
               width={65}

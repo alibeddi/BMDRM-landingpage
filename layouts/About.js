@@ -72,7 +72,7 @@ const About = ({ data }) => {
                 />
               </div>
             </div>
-            <div className="animate md:col-6 md:order-1 lg:col-4">
+            <div className="animate md:col-6 md:order-1 bg-white lg:col-4">
               <p>{about_us.subtitle}</p>
               {markdownify(about_us.title, "h2", "section-title bar-left mt-4")}
               {markdownify(about_us.content, "p", "mt-10")}
@@ -81,13 +81,13 @@ const About = ({ data }) => {
         </div>
 
         {/* Works */}
-        <div className="section container">
+        <div className="section container ">
           <div className="animate text-center">
             <p>{works.subtitle}</p>
             {markdownify(works.title, "h2", "section-title mt-4")}
             {markdownify(works.content, "p", "mt-10")}
           </div>
-          <div className="row mt-10 justify-center">
+          <div className="row mt-10 justify-center bg-white">
             {works.list.map((work, index) => (
               <div key={"work-" + index} className="mt-10 md:col-6 lg:col-5">
                 <div className="animate text-center md:px-6 xl:px-12">
@@ -145,7 +145,7 @@ const About = ({ data }) => {
               fill={false}
             />
           </div>
-          <div className="row items-center justify-center py-[90px]">
+          <div className="row items-center justify-center py-[90px] ">
             <div className="md:col-6 xl:col-4">
               <div className="animate p-5">
                 <p>{video.subtitle}</p>
