@@ -17,7 +17,7 @@ const Clients = () => {
         <p>Our clients</p>
         {markdownify("Trusted by", "h2", "section-title mt-4")}
       </div>
-      <div className="animate from-right col-12 mt-16">
+      <div className="animate from-right  bg-white col-12 mt-16">
         <Swiper
           loop={true}
           slidesPerView={3}
@@ -31,11 +31,11 @@ const Clients = () => {
         >
           {CLIENTS.map((brand, index) => (
             <SwiperSlide
-              className=" h-20 cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
+              className=" h-[max-content] cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
               key={"brand-" + index}
               autoplay
             >
-              <div className="relative h-full">
+              <div className="relative h-[70px] w-[100px]">
                 <ImageFallback
                   className="object-contain"
                   src={brand}
