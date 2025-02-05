@@ -13,7 +13,6 @@ export default function RootLayout({ children }) {
   const pf = theme.fonts.font_family.primary;
   const sf = theme.fonts.font_family.secondary;
 
-  // Load jQuery and the custom script
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Dynamically load jQuery
