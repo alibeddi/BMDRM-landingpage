@@ -27,7 +27,7 @@ async function fetchUrl() {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "API-KEY": env("NEXT_PUBLIC_API_KEY"),
+      apiKey: env("NEXT_PUBLIC_API_KEY"),
     },
   };
 
@@ -43,7 +43,6 @@ async function fetchUrl() {
   }
 
   const data = await response.json();
-  const generateVideoLink = `https://player.bmdrm.com/player?otp=${data.otp}&sessionId=${data.sessionId}`;
-
+  const generateVideoLink = data.urlToEdge;
   return generateVideoLink;
 }
