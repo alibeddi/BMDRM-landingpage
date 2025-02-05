@@ -214,7 +214,11 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>
+      <body
+      // style={{
+      //   overflow: "hidden",
+      // }}
+      >
         <TwSizeIndicator />
         <Header />
         <div className="particle-network-animation" ref={canvasRef}></div>

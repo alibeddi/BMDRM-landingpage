@@ -87,18 +87,18 @@ const Banner = ({ title }) => {
             />
 
             <Circle
-              className="circle left-[15%] top-[18%]"
+              className="hidden md:block circle left-[15%] top-[18%]"
               width={32}
               height={32}
               fill={false}
             />
             <Circle
-              className="circle bottom-[27%] left-[4%]"
+              className="hidden md:block  circle bottom-[27%] left-[4%]"
               width={73}
               height={73}
             />
             <Circle
-              className="circle bottom-[27%] left-[39.5%]"
+              className="hidden md:block  circle bottom-[27%] left-[39.5%]"
               width={20}
               height={20}
             />
@@ -115,35 +115,35 @@ const Banner = ({ title }) => {
               fill={false}
             />
             <Circle
-              className="circle right-[27%] top-[15%]"
+              className="hidden md:block  circle right-[27%] top-[15%]"
               width={20}
               height={20}
               fill={false}
             />
             <Circle
-              className="circle bottom-[17%] right-[3%]"
+              className=" circle bottom-[17%] right-[3%]"
               width={73}
               height={73}
               fill={false}
             />
             <Circle
-              className="circle bottom-[50%] right-[38%]"
+              className="hidden md:block circle bottom-[50%] right-[38%]"
               width={20}
               height={20}
               fill={false}
             />
             <Circle
-              className="circle right-[13%] top-[30%]"
+              className="hidden md:block circle right-[13%] top-[30%]"
               width={20}
               height={20}
             />
             <Circle
-              className="circle bottom-[29%] right-[20%]"
+              className="hidden md:block circle bottom-[29%] right-[20%]"
               width={65}
               height={65}
             />
             <Circle
-              className="circle bottom-[12%] right-[35%]"
+              className="hidden md:block circle bottom-[12%] right-[35%]"
               width={37}
               height={37}
               fill={false}
