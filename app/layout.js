@@ -213,6 +213,21 @@ export default function RootLayout({ children }) {
           href={`https://fonts.googleapis.com/css2?family=${pf}${sf ? `&family=${sf}` : ""}`}
           rel="stylesheet"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.$takiChat = [];
+              window.WEBSITE_ID = "74504d7f-d7a5-8644-e";
+              (function () {
+                var d = document;
+                var s = d.createElement("script");
+                s.src ="https://api.messaggera.com/api/owner/websites/74504d7f-d7a5-8644-e/check";
+                s.async = true;
+                d.getElementsByTagName("head")[0].appendChild(s);
+              })();
+            `,
+          }}
+        />
       </head>
       <body
       // style={{
