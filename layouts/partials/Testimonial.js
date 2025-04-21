@@ -31,14 +31,14 @@ const Testimonial = ({ testimonial }) => {
               <div className="md:col-7 lg:col-6 xl:col-4">
                 {
                   <Swiper
-                    modules={[Pagination, Autoplay]}
+                    modules={[Pagination, AutoPlay]}
                     pagination={{
                       el: testimonialPaginationRef.current,
                       type: "bullets",
                       dynamicBullets: true,
                       clickable: true,
                     }}
-                    autoplay={{ delay: 3000 }}
+                    autoPlay={{ delay: 3000 }}
                     onBeforeInit={(swiper) => {
                       swiper.params.pagination.el =
                         testimonialPaginationRef.current;
@@ -55,7 +55,7 @@ const Testimonial = ({ testimonial }) => {
                           {markdownify(
                             item.content,
                             "p",
-                            "text-[17px] lg:text-lg text-body mt-4 md:mt-5 xl:mt-8"
+                            "text-[17px] lg:text-lg text-body mt-4 md:mt-5 xl:mt-8",
                           )}
                           <div className="mt-7 inline-block rounded-md bg-body p-7 shadow-[0_10px_50px_rgba(0,0,0,.08)] md:mt-5 lg:mt-8 xl:mt-5">
                             <ImageFallback

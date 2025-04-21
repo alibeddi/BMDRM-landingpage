@@ -57,7 +57,7 @@ const Header = () => {
       >
         <nav className="navbar container-xl">
           {/* logo */}
-          <div className="order-0">
+          <div className="ml-[-40px] order-0 flex gap-2">
             <Logo src={logo} />
           </div>
 

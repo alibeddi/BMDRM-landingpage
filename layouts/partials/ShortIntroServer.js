@@ -6,7 +6,12 @@ const ShortIntroServer = () => {
   return (
     <section className="section pt-0">
       <div className="container-xl">
-        <div className="relative px-4 py-[70px] bg-[#F5F5F5] z-[-99] rounded-md">
+        <div
+          style={{
+            zIndex: "9 !important",
+          }}
+          className="relative px-4 py-[70px] bg-[#F5F5F5] z-[-99] rounded-md"
+        >
           <div className="text-center">
             <div className="animate">
               <p>View Demo</p>

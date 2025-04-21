@@ -6,7 +6,7 @@ import GSAPWrapper from "@layouts/components/GSAPWrapper";
 const pricingTiers = [
   {
     name: "Lite",
-    price: "$40/year",
+    price: "$40/3 Months",
     description: "For individuals getting started",
     features: [
       "Max storage: 50,00 GB",
@@ -100,7 +100,7 @@ const pricingTiers = [
     price: "$20800/year",
     description: "Best for growing teams",
     features: [
-      " Storage: 200 TB",
+      "Storage: 20 TB",
       "Bandwidth: 500,00 TB",
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",

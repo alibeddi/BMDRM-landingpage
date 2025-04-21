@@ -27,13 +27,13 @@ const Clients = () => {
             },
           }}
           spaceBetween={20}
-          autoplay={{ delay: 3000 }}
+          autoPlay={{ delay: 3000 }}
         >
           {CLIENTS.map((brand, index) => (
             <SwiperSlide
               className=" h-[max-content] cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
               key={"brand-" + index}
-              autoplay
+              autoPlay
             >
               <div className="relative h-[70px] w-[100px]">
                 <ImageFallback

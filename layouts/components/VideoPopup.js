@@ -3,7 +3,7 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import ImageFallback from "./ImageFallback";
-import Button from "@layouts/shortcodes/Button";
+import VideoFrame from "@layouts/components/VideoFrame";
 
 function VideoPopup({ id, thumbnail, width = 700, height = 394 }) {
   const handleMove = () => {

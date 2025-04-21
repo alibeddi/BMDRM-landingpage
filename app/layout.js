@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
             this.ctx = this.canvas.getContext('2d');
             this.particleNetwork = new ParticleNetwork(this);
 
-            this.bindUiActions();
+             this.bindUiActions();
             return this;
           };
 
@@ -111,7 +111,7 @@ export default function RootLayout({ children }) {
           ParticleNetwork.prototype.init = function() {
             this.createParticles(true);
             this.animationFrame = requestAnimationFrame(this.update.bind(this));
-            this.bindUiActions();
+             this.bindUiActions();
           };
 
           ParticleNetwork.prototype.createParticles = function(isInitial) {
