@@ -12,7 +12,7 @@ const CLIENTS = [
 ];
 const Clients = () => {
   return (
-    <div className="section container">
+    <div className="section  container">
       <div className="animate text-center">
         <p>Our clients</p>
         {markdownify("Trusted by", "h2", "section-title mt-4")}

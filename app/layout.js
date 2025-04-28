@@ -6,6 +6,7 @@ import TwSizeIndicator from "@layouts/components/TwSizeIndicator";
 import { useEffect, useRef } from "react";
 import Header from "@layouts/partials/Header";
 import "../styles/style.scss";
+import Head from 'next/head';
 
 export default function RootLayout({ children }) {
   const canvasRef = useRef(null);
@@ -200,15 +201,11 @@ export default function RootLayout({ children }) {
 
   return (
     <html suppressHydrationWarning={true} lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=5" />
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href={config.site.favicon} />
         <meta name="theme-name" content="andromeda-light-nextjs" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href={`https://fonts.googleapis.com/css2?family=${pf}${sf ? `&family=${sf}` : ""}`}
           rel="stylesheet"
@@ -228,11 +225,10 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-      </head>
+      </Head>
+    
       <body
-      // style={{
-      //   overflow: "hidden",
-      // }}
+        className={`${pf.variable} ${sf.variable} font-primary bg-white`}
       >
         <TwSizeIndicator />
         <Header />

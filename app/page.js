@@ -14,10 +14,12 @@ const Home = async () => {
       <SeoMeta title="Home" />
 
       <ShortIntro intro={intro} />
-      <Clients />
-      <Features features={features} />
-      <Cta />
-    </GSAPWrapper>
+      <div className="w-full overflow-hidden md:w-auto md:overflow-visible">     
+        <Clients />
+       <Features features={features} />
+      <Cta /> 
+      </div>   
+  / </GSAPWrapper>
   );
 };
 

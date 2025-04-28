@@ -7,17 +7,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { CgClose } from "react-icons/cg";
 
 const Header = () => {
-  // distructuring the main menu from menu object
+  // Destructuring the main menu from menu object
   const { main } = menu;
 
-  // states declaration
+  // States and refs declaration
   const [showMenu, setShowMenu] = useState(false);
   const [sticky, setSticky] = useState(false);
   const headerRef = useRef(null);
+  const menuRef = useRef(null); // Ref for the menu container
   const [direction, setDirection] = useState(null);
 
   const pathname = usePathname();
   const asPath = pathname;
+
   const handleChatboxClick = () => {
     const chatboxElement = document.querySelector(".chatbox-logo");
     if (chatboxElement) {
@@ -26,12 +28,13 @@ const Header = () => {
       console.warn("Chatbox element not found.");
     }
   };
-  //sticky header
+
+  // Sticky header
   useEffect(() => {
     const header = headerRef.current;
     const headerHeight = header.clientHeight + 200;
     let prevScroll = 0;
-    window.addEventListener("scroll", () => {
+    const handleScroll = () => {
       const scrollY = window.scrollY;
       scrollY > 0 ? setSticky(true) : setSticky(false);
       if (scrollY > headerHeight) {
@@ -40,32 +43,54 @@ const Header = () => {
       } else {
         setDirection(null);
       }
-    });
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // logo source
+  // Close menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        showMenu
+      ) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMenu]);
+
+  // Logo source
   const { logo } = config.site;
 
   return (
     <>
       <div className="header-height-fix"></div>
       <header
-        className={`header ${sticky && "header-sticky"} ${
-          direction === 1 && "unpinned"
+        className={`header ${sticky ? "header-sticky" : ""} ${
+          direction === 1 ? "unpinned" : "pinned"
         }`}
         ref={headerRef}
       >
         <nav className="navbar container-xl">
-          {/* logo */}
+          {/* Logo */}
           <div className="ml-[-40px] order-0 flex gap-2">
             <Logo src={logo} />
           </div>
 
+          {/* Menu */}
           <ul
             id="nav-menu"
             className={`navbar-nav order-2 w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex ${
               !showMenu && "hidden"
             }`}
+            ref={menuRef} // Attach ref to the menu
           >
             {main.map((menu, i) => (
               <React.Fragment key={`menu-${i}`}>
@@ -127,7 +152,7 @@ const Header = () => {
               </div>
             )}
 
-            {/* navbar toggler */}
+            {/* Navbar toggler */}
             {showMenu ? (
               <button
                 className="h-8 w-8 text-3xl text-dark lg:hidden"
@@ -153,7 +178,7 @@ const Header = () => {
                 </svg>
               </button>
             )}
-            {/* /navbar toggler */}
+            {/* /Navbar toggler */}
           </div>
         </nav>
       </header>
