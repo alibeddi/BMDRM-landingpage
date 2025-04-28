@@ -6,7 +6,7 @@ import TwSizeIndicator from "@layouts/components/TwSizeIndicator";
 import { useEffect, useRef } from "react";
 import Header from "@layouts/partials/Header";
 import "../styles/style.scss";
-import Head from 'next/head';
+import Head from "next/head";
 
 export default function RootLayout({ children }) {
   const canvasRef = useRef(null);
@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
             this.ctx = this.canvas.getContext('2d');
             this.particleNetwork = new ParticleNetwork(this);
 
-             this.bindUiActions();
+            //  this.bindUiActions();
             return this;
           };
 
@@ -112,7 +112,7 @@ export default function RootLayout({ children }) {
           ParticleNetwork.prototype.init = function() {
             this.createParticles(true);
             this.animationFrame = requestAnimationFrame(this.update.bind(this));
-             this.bindUiActions();
+            //  this.bindUiActions();
           };
 
           ParticleNetwork.prototype.createParticles = function(isInitial) {
@@ -205,7 +205,11 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" href={config.site.favicon} />
         <meta name="theme-name" content="andromeda-light-nextjs" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href={`https://fonts.googleapis.com/css2?family=${pf}${sf ? `&family=${sf}` : ""}`}
           rel="stylesheet"
@@ -226,10 +230,8 @@ export default function RootLayout({ children }) {
           }}
         />
       </Head>
-    
-      <body
-        className={`${pf.variable} ${sf.variable} font-primary bg-white`}
-      >
+
+      <body className={`${pf.variable} ${sf.variable} font-primary bg-white`}>
         <TwSizeIndicator />
         <Header />
         <div className="particle-network-animation" ref={canvasRef}></div>

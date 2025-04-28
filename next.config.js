@@ -7,6 +7,9 @@ const nextConfig = {
   output: "standalone",
 
   reactStrictMode: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
 };
 
 module.exports = nextConfig;
