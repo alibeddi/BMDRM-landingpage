@@ -2,13 +2,12 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, EffectCreative } from "swiper";
+import { Navigation, Pagination } from "swiper";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
-import "swiper/css/effect-creative";
+import "swiper/css/pagination";
 
 const features = [
   {
@@ -33,12 +32,10 @@ const features = [
 
 const FeaturesInAction = () => {
   const [selected, setSelected] = useState(0);
-  const [slideDirection, setSlideDirection] = useState('next');
   const [swiperInitialized, setSwiperInitialized] = useState(false);
   const swiperRef = useRef(null);
   const intervalRef = useRef(null);
-  const tabsContainerRef = useRef(null);
-  const tabRefs = useRef([]);
+  const paginationRef = useRef(null);
   
   // Auto-slide functionality
   useEffect(() => {
@@ -46,7 +43,6 @@ const FeaturesInAction = () => {
     
     intervalRef.current = setInterval(() => {
       if (swiperRef.current && swiperRef.current.swiper) {
-        setSlideDirection('next');
         swiperRef.current.swiper.slideNext();
       }
     }, 5000);
@@ -57,32 +53,6 @@ const FeaturesInAction = () => {
       }
     };
   }, [swiperInitialized]);
-  
-  const handleFeatureClick = (idx) => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    
-    if (swiperRef.current && swiperRef.current.swiper) {
-      // Determine slide direction based on index comparison
-      if (idx > selected) {
-        setSlideDirection('next');
-      } else if (idx < selected) {
-        setSlideDirection('prev');
-      }
-      
-      // Directly navigate to the selected slide
-      swiperRef.current.swiper.slideTo(idx);
-    }
-    
-    // Restart auto-slide
-    intervalRef.current = setInterval(() => {
-      if (swiperRef.current && swiperRef.current.swiper) {
-        setSlideDirection('next');
-        swiperRef.current.swiper.slideNext();
-      }
-    }, 5000);
-  };
 
   const handleSlideChange = (swiper) => {
     setSelected(swiper.activeIndex);
@@ -97,34 +67,11 @@ const FeaturesInAction = () => {
       <div className="container-xl">
         <div className="relative px-4 py-[70px] bg-transparent1 rounded-md">
           <div className="flex flex-col items-center">
- 
-            <div className="w-full mb-8 bg-transparent p-4">
-              <div className="relative flex flex-wrap justify-center gap-3 mb-4" ref={tabsContainerRef}>
-                {features.map((feature, idx) => (
-                  <button
-                    key={feature.name}
-                    ref={(el) => (tabRefs.current[idx] = el)}
-                    onClick={() => handleFeatureClick(idx)}
-                    className={`flex items-center px-4 opacity-70 py-2 rounded-lg shadow-md ${
-                      selected === idx
-                        ? "!opacity-100 bg-white/90 !text-gray-700 relative"
-                        : "bg-gray-100 !text-gray-500 hover:bg-white/90"
-                    }`}
-                    style={{
-                      transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                      borderWidth: selected === idx ? "2px" : "0px",
-                      borderStyle: "solid",
-                      borderColor: "#9E72FF",
-                      transform: selected === idx ? "scale(1.05)" : "scale(1)",
-                    }}
-                  >
-                    <span className="mr-2">
-                      <Image src={feature.icon} alt="" width={20} height={20} />
-                    </span>
-                    <span className="font-medium">{feature.name}</span>
-                  </button>
-                ))}
-              </div>
+            
+            {/* Title replacing buttons */}
+            <div className="w-full mb-10 text-center">
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">Features in Action</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">Explore our platform's powerful features through these interactive examples</p>
             </div>
         
             {/* Feature screenshot with Swiper */}
@@ -132,14 +79,24 @@ const FeaturesInAction = () => {
               <div className="swiper-container-wrapper">
                 <Swiper
                   ref={swiperRef}
-                  modules={[Pagination, Navigation, EffectCreative]}
-                  effect="slide" // Changed from creative to standard slide
+                  modules={[Navigation, Pagination]}
+                  effect="slide"
                   speed={800}
                   slidesPerView={1}
                   spaceBetween={20}
+                  loop={true}
                   initialSlide={selected}
                   onSlideChange={handleSlideChange}
                   onInit={handleSwiperInit}
+                  pagination={{
+                    el: paginationRef.current,
+                    type: "bullets",
+                    clickable: true,
+                    dynamicBullets: true,
+                  }}
+                  onBeforeInit={(swiper) => {
+                    swiper.params.pagination.el = paginationRef.current;
+                  }}
                   className="rounded-2xl overflow-hidden bg-transparent relative mx-auto max-w-5xl"
                 >
                   {features.map((feature, idx) => (
@@ -157,10 +114,10 @@ const FeaturesInAction = () => {
                           />
                         </div>
                         
-                        {/* Description */}
+                        {/* Description with smaller font */}
                         <div className="p-6 text-center">
                           <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.name}</h3>
-                          <p className="text-gray-700 font-medium text-lg leading-relaxed">
+                          <p className="text-gray-700 text-sm leading-relaxed">
                             {feature.description}
                           </p>
                         </div>
@@ -168,6 +125,11 @@ const FeaturesInAction = () => {
                     </SwiperSlide>
                   ))}
                 </Swiper>
+                
+                {/* Pagination dots */}
+                <div className="mt-16 flex justify-center pl-12">
+                  <div className="pagination pl-8" ref={paginationRef}></div>
+                </div>
               </div>
             </div>
           </div>
@@ -177,6 +139,21 @@ const FeaturesInAction = () => {
           <div className="absolute -z-10 bottom-10 left-10 w-60 h-60 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
         </div>
       </div>
+      <style jsx global>{`
+        .swiper-container-wrapper {
+          position: relative;
+          overflow: hidden;
+          width: 100%;
+          border-radius: 1rem;
+        }
+        .swiper-slide {
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+        .swiper-wrapper {
+          will-change: transform;
+        }
+      `}</style>
     </section>
   );
 };
