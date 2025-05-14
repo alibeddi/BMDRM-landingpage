@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
-
+import { markdownify } from "@lib/utils/textConverter";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -70,8 +70,9 @@ const FeaturesInAction = () => {
             
             {/* Title replacing buttons */}
             <div className="w-full mb-10 text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Features in Action</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">Explore our platform's powerful features through these interactive examples</p>
+              {/* <h2 className="mb-4">Features in Action</h2> */}
+              {markdownify("Features in Action", "h2", "mb-4 section-title")}
+              <p className="mt-10 mx-auto">Explore our platform's powerful features through these interactive examples</p>
             </div>
         
             {/* Feature screenshot with Swiper */}
