@@ -6,7 +6,8 @@ import GSAPWrapper from "@layouts/components/GSAPWrapper";
 const pricingTiers = [
   {
     name: "Lite",
-    price: "$40/3 Months",
+    price: "$40",
+    period: "/3 Months",
     description: "For individuals getting started",
     features: [
       "Max storage: 50,00 GB",
@@ -14,25 +15,25 @@ const pricingTiers = [
       "Bandwidth Cost: $0.9/GB",
       "Storage cost per Gb: 0.6$",
     ],
-    cta: "Get Started",
-    highlighted: false,
+    cta: "Purchase",
   },
   {
     name: "Starter",
-    price: "$120/year",
+    price: "$120",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Max storage: 100,00 GB",
-      "Bandwidth: 1 000,00 GB",
+      "Bandwidth: 1 000,00 GB",
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost per Gb: 0.6$",
     ],
-    cta: "Choose Starter",
-    highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Value",
-    price: "$320/year",
+    price: "$320",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Max storage: 200,00 GB",
@@ -40,12 +41,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage cost per Gb: 0.6$",
     ],
-    cta: "Choose Value",
-    // highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Express",
-    price: "$560/year",
+    price: "$560",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Storage: 400 GB",
@@ -53,12 +54,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",
     ],
-    cta: "Choose Express",
-    // highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Pro",
-    price: "$1,280/year",
+    price: "$1,280",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Storage: 1 TB",
@@ -66,12 +67,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",
     ],
-    cta: "Choose Pro",
-    highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Plus",
-    price: "$2400/year",
+    price: "$2,400",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Storage: 1.2 TB",
@@ -79,12 +80,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",
     ],
-    cta: "Choose Plus",
-    // highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Premium",
-    price: "$4000/year",
+    price: "$4,000",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Max storage: 2,00 TB",
@@ -92,12 +93,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",
     ],
-    cta: "Choose Premium",
-    // highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Supreme",
-    price: "$20800/year",
+    price: "$20,800",
+    period: "/year",
     description: "Best for growing teams",
     features: [
       "Storage: 20 TB",
@@ -105,12 +106,12 @@ const pricingTiers = [
       "Bandwidth Cost: $0.06/GB",
       "Storage Cost: $0.6/GB",
     ],
-    cta: "Choose Supreme",
-    highlighted: true,
+    cta: "Purchase",
   },
   {
     name: "Custom",
     price: "Contact Us",
+    period: "",
     description: "Custom solutions for enterprises",
     features: [
       "All Pro Features",
@@ -119,54 +120,216 @@ const pricingTiers = [
       "Upload API, Multi-user access",
     ],
     cta: "Contact Sales",
-    // highlighted: false,
   },
 ];
-//  bg-gradient-to-br from-gray-50 to-purple-50
+
 const Pricing = () => {
+  // Extract data for table columns
+  const extractFeatureValue = (features, keyword) => {
+    const feature = features.find(f => 
+      f.toLowerCase().includes(keyword.toLowerCase()) && 
+      (keyword !== 'bandwidth' || !f.toLowerCase().includes('cost'))
+    );
+    if (!feature) return 'N/A';
+    
+    const parts = feature.split(':');
+    return parts.length > 1 ? parts[1].trim() : feature;
+  };
+
   return (
     <GSAPWrapper>
       <SeoMeta title="Pricing" />
-      <section className="min-h-screen bg-transparent py-16 px-4 flex flex-col items-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-purple-900 text-center">
-          Our Pricing Plans
-        </h1>
-        <p className="text-lg text-purple-800 mb-12 text-center max-w-2xl">
-          Choose the plan that fits your needs. Upgrade, downgrade, or cancel
-          anytime. No hidden fees.
-        </p>
-        <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pricingTiers.map((tier, idx) => (
-            <div
-              key={tier.name}
-              className={`relative rounded-3xl shadow-xl bg-white p-8 flex flex-col items-center border transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                tier.highlighted
-                  ? "border-purple-600 scale-105 ring-4 ring-purple-100 z-10"
-                  : "border-gray-200"
-              }`}
-            >
-              {tier.highlighted && (
-                <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs px-4 py-1 rounded-full font-semibold tracking-wide shadow-md animate-bounce">
-                  Most Popular
-                </span>
-              )}
-              <h2 className="text-2xl font-bold text-purple-900 mb-2">
-                {tier.name}
-              </h2>
-              <div className="text-4xl font-extrabold text-purple-700 mb-2">
-                {tier.price}
+      <section className="section bg-body">
+        <div className="container-xl">
+          {/* Header */}
+          <div className="animate text-center mb-16">
+            <p className="uppercase text-light mb-4 tracking-wider text-sm font-medium">PRICING PLANS</p>
+            <h1 className="h2 text-dark mb-6">Choose Your Perfect Plan</h1>
+            <p className="text-text max-w-2xl mx-auto leading-relaxed">
+              Simple, transparent pricing that grows with you. Try any plan free for 30 days.
+            </p>
+          </div>
+
+          {/* Desktop Table */}
+          <div className="animate from-right hidden lg:block">
+            <div className="bg-white rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,.08)] overflow-hidden border border-border">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="bg-primary border-b border-border">
+                      <th className="text-left py-6 px-8 text-white font-semibold text-base">
+                        Plan
+                      </th>
+                      <th className="text-center py-6 px-6 text-white font-semibold text-base">
+                        Price
+                      </th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
+                        Storage
+                      </th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
+                        Bandwidth
+                      </th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
+                        Bandwidth Cost
+                      </th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
+                        Storage Cost
+                      </th>
+                      <th className="text-center py-6 px-8 text-white font-semibold text-base">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pricingTiers.map((tier, idx) => {
+                      const storage = extractFeatureValue(tier.features, 'storage');
+                      const bandwidth = extractFeatureValue(tier.features, 'bandwidth');
+                      const bandwidthCost = extractFeatureValue(tier.features, 'bandwidth cost');
+                      const storageCost = extractFeatureValue(tier.features, 'storage cost');
+                      
+                      return (
+                        <tr
+                          key={tier.name}
+                          className="border-b border-border last:border-b-0 transition-all duration-300 hover:bg-theme-light/50"
+                        >
+                          <td className="py-8 px-8">
+                            <div className="flex items-center gap-3">
+                              <div>
+                                <h3 className="text-lg font-semibold text-dark mb-1">
+                                  {tier.name}
+                                </h3>
+                                <p className="text-sm text-text leading-relaxed">
+                                  {tier.description}
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-8 px-6 text-center">
+                            <div className="flex flex-col items-center">
+                              {tier.price === 'Contact Us' ? (
+                                <div className="text-lg font-semibold text-primary">
+                                  Contact Us
+                                </div>
+                              ) : (
+                                <>
+                                  <div className="text-2xl font-bold text-dark mb-1">
+                                    {tier.price}
+                                  </div>
+                                  <div className="text-sm text-text font-medium">
+                                    {tier.period}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-8 px-4 text-center text-text font-medium">
+                            {storage}
+                          </td>
+                          <td className="py-8 px-4 text-center text-text font-medium">
+                            {bandwidth}
+                          </td>
+                          <td className="py-8 px-4 text-center text-text font-medium">
+                            {bandwidthCost}
+                          </td>
+                          <td className="py-8 px-4 text-center text-text font-medium">
+                            {storageCost}
+                          </td>
+                          <td className="py-8 px-8 text-center">
+                            <button
+                              className="px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 mx-auto bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl"
+                            >
+                              {tier.cta}
+                              {tier.cta !== 'Contact Sales' && (
+                                <svg
+                                  className="w-4 h-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 5l7 7-7 7"
+                                  />
+                                </svg>
+                              )}
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-              <p className="text-purple-800 mb-6 text-center">
-                {tier.description}
-              </p>
-              <ul className="mb-8 w-full">
-                {tier.features.map((feature, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center gap-2 mb-2 text-purple-700"
-                  >
+            </div>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="animate lg:hidden space-y-6">
+            {pricingTiers.map((tier, idx) => (
+              <div
+                key={tier.name}
+                className="bg-white rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,.08)] p-8 border border-border transition-all duration-300 hover:shadow-[0px_8px_35px_rgba(0,0,0,.12)] hover:border-primary/30"
+              >
+                {/* Header */}
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-dark mb-2">
+                      {tier.name}
+                    </h3>
+                    <p className="text-sm text-text">{tier.description}</p>
+                  </div>
+                  <div className="text-right">
+                    {tier.price === 'Contact Us' ? (
+                      <div className="text-lg font-semibold text-primary">
+                        Contact Us
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-2xl font-bold text-dark">
+                          {tier.price}
+                        </div>
+                        <div className="text-sm text-text font-medium mt-1">
+                          {tier.period}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Features */}
+                <div className="space-y-3 mb-8">
+                  {tier.features.map((feature, i) => (
+                    <div key={i} className="flex items-start gap-3 text-text">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
+                        <svg
+                          className="w-3 h-3 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-sm leading-relaxed">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* CTA Button */}
+                <button
+                  className="w-full py-4 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl"
+                >
+                  {tier.cta}
+                  {tier.cta !== 'Contact Sales' && (
                     <svg
-                      className="w-5 h-5 text-purple-500"
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -175,40 +338,26 @@ const Pricing = () => {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
+                        d="M9 5l7 7-7 7"
                       />
                     </svg>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className={`w-full py-3 rounded-xl font-bold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 ${
-                  tier.highlighted
-                    ? "bg-purple-600 text-white hover:bg-purple-700 shadow-lg"
-                    : "bg-purple-100 text-purple-900 hover:bg-purple-200"
-                }`}
-              >
-                {tier.cta}
-              </button>
-            </div>
-          ))}
+                  )}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="animate text-center mt-16">
+            <p className="text-text mb-6">
+              Need a custom solution? We're here to help.
+            </p>
+            <button className="bg-theme-light text-dark px-8 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition-all duration-300 border border-border hover:border-primary">
+              Contact Sales
+            </button>
+          </div>
         </div>
       </section>
-      <style jsx>{`
-        .animate-bounce {
-          animation: bounce 1.2s infinite;
-        }
-        @keyframes bounce {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-      `}</style>
     </GSAPWrapper>
   );
 };
