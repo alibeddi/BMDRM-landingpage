@@ -350,7 +350,7 @@ const Pricing = () => {
           {/* Bottom CTA */}
           <div className="animate text-center mt-16">
             <p className="text-text mb-6">
-              Need a custom solution? We're here to help.
+              Need a custom solution? We&#39;re here to help.
             </p>
             <button className="bg-theme-light text-dark px-8 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition-all duration-300 border border-border hover:border-primary">
               Contact Sales
