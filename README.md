@@ -94,8 +94,12 @@ If your problem or idea has not been addressed yet, feel free to [open a new iss
 
 If you have questions or need help integrating the product please [contact us](https://themefisher.com/contact) instead of opening an issue.
 
+<<<<<<< Updated upstream
 <!-- licence -->
 ## 📄License
+=======
+Customize colors, fonts, and other design tokens in:3
+>>>>>>> Stashed changes
 
 Copyright (c) 2016 - Present, Designed & Developed by [Themefisher](https://themefisher.com)
 

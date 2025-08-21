@@ -1,140 +1,74 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SeoMeta from "@layouts/partials/SeoMeta";
 import GSAPWrapper from "@layouts/components/GSAPWrapper";
 
-const pricingTiers = [
-  {
-    name: "Lite",
-    price: "$40",
-    period: "/3 Months",
-    description: "For individuals getting started",
-    features: [
-      "Max storage: 50,00 GB",
-      "Bandwidth: 200,00 GB",
-      "Bandwidth Cost: $0.9/GB",
-      "Storage cost per Gb: 0.6$",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Starter",
-    price: "$120",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Max storage: 100,00 GB",
-      "Bandwidth: 1 000,00 GB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost per Gb: 0.6$",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Value",
-    price: "$320",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Max storage: 200,00 GB",
-      "Bandwidth: 2,50 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage cost per Gb: 0.6$",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Express",
-    price: "$560",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Storage: 400 GB",
-      "Bandwidth: 5 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost: $0.6/GB",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Pro",
-    price: "$1,280",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Storage: 1 TB",
-      "Bandwidth: 15 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost: $0.6/GB",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Plus",
-    price: "$2,400",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Storage: 1.2 TB",
-      "Bandwidth: 30 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost: $0.6/GB",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Premium",
-    price: "$4,000",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Max storage: 2,00 TB",
-      "Bandwidth: 50,00 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost: $0.6/GB",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Supreme",
-    price: "$20,800",
-    period: "/year",
-    description: "Best for growing teams",
-    features: [
-      "Storage: 20 TB",
-      "Bandwidth: 500,00 TB",
-      "Bandwidth Cost: $0.06/GB",
-      "Storage Cost: $0.6/GB",
-    ],
-    cta: "Purchase",
-  },
-  {
-    name: "Custom",
-    price: "Contact Us",
-    period: "",
-    description: "Custom solutions for enterprises",
-    features: [
-      "All Pro Features",
-      "Dedicated Manager",
-      "Custom Integrations",
-      "Upload API, Multi-user access",
-    ],
-    cta: "Contact Sales",
-  },
-];
 
 const Pricing = () => {
-  // Extract data for table columns
-  const extractFeatureValue = (features, keyword) => {
-    const feature = features.find(f => 
-      f.toLowerCase().includes(keyword.toLowerCase()) && 
-      (keyword !== 'bandwidth' || !f.toLowerCase().includes('cost'))
-    );
-    if (!feature) return 'N/A';
-    
-    const parts = feature.split(':');
-    return parts.length > 1 ? parts[1].trim() : feature;
-  };
+  const [pricingTiers, setPricingTiers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchPricing = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+
+    const response = await fetch("/api/pricing");
+    if (!response.ok) {
+      throw new Error(`Error fetching pricing: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    setPricingTiers(data || []);
+  } catch (err) {
+    setError(err.message || "Failed to fetch pricing");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  useEffect(() => {
+    fetchPricing();
+  }, []);
+
+const formatStorage = (bytes) => {
+  if (!bytes) return "N/A";
+  const gb = bytes / (1024 ** 3); // 1 GB = 1024^3 bytes
+  return `${gb.toFixed(2)} GB`;
+};
+
+const formatBandwidth = (bytes) => {
+  if (!bytes) return "N/A";
+  const gb = bytes / (1024 ** 3);
+  return `${gb.toFixed(2)} GB`;
+};
+
+
+
+const formatExpiresAfter = (expires) => {
+  if (!expires) return "N/A";
+
+  const [daysPart] = expires.split(".");
+  const days = parseInt(daysPart, 10);
+
+  if (days >= 365) {
+    const years = Math.round(days / 365);
+    return `${years} year${years > 1 ? "s" : ""}`;
+  } else if (days >= 30) {
+    const months = Math.round(days / 30);
+    return `${months} month${months > 1 ? "s" : ""}`;
+  } else {
+    return `${days} day${days > 1 ? "s" : ""}`;
+  }
+};
+
+
+  const formatPrice = (amount) => `$${amount}`;
+  
+
+  if (loading) return <p className="text-center py-10">Loading pricing plans...</p>;
+  if (error) return <p className="text-center py-10 text-red-500">{error}</p>;
 
   return (
     <GSAPWrapper>
@@ -157,108 +91,53 @@ const Pricing = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-primary border-b border-border">
-                      <th className="text-left py-6 px-8 text-white font-semibold text-base">
-                        Plan
-                      </th>
-                      <th className="text-center py-6 px-6 text-white font-semibold text-base">
-                        Price
-                      </th>
-                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
-                        Storage
-                      </th>
-                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
-                        Bandwidth
-                      </th>
-                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
-                        Bandwidth Cost
-                      </th>
-                      <th className="text-center py-6 px-4 text-white font-semibold text-base">
-                        Storage Cost
-                      </th>
-                      <th className="text-center py-6 px-8 text-white font-semibold text-base">
-                        Action
-                      </th>
+                      <th className="text-left py-6 px-8 text-white font-semibold text-base">Plan</th>
+                      <th className="text-center py-6 px-6 text-white font-semibold text-base">Price</th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">Storage</th>
+                      <th className="text-center py-6 px-4 text-white font-semibold text-base">Bandwidth</th>
+                      <th className="text-center py-6 px-8 text-white font-semibold text-base">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {pricingTiers.map((tier, idx) => {
-                      const storage = extractFeatureValue(tier.features, 'storage');
-                      const bandwidth = extractFeatureValue(tier.features, 'bandwidth');
-                      const bandwidthCost = extractFeatureValue(tier.features, 'bandwidth cost');
-                      const storageCost = extractFeatureValue(tier.features, 'storage cost');
-                      
-                      return (
-                        <tr
-                          key={tier.name}
-                          className="border-b border-border last:border-b-0 transition-all duration-300 hover:bg-theme-light/50"
-                        >
-                          <td className="py-8 px-8">
-                            <div className="flex items-center gap-3">
-                              <div>
-                                <h3 className="text-lg font-semibold text-dark mb-1">
-                                  {tier.name}
-                                </h3>
-                                <p className="text-sm text-text leading-relaxed">
-                                  {tier.description}
-                                </p>
-                              </div>
+                    {pricingTiers.map((tier) => (
+                      <tr
+                        key={tier.id}
+                        className="border-b border-border last:border-b-0 transition-all duration-300 hover:bg-theme-light/50"
+                      >
+                        <td className="py-8 px-8">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <h3 className="text-lg font-semibold text-dark mb-1">{tier.name}</h3>
+                             
                             </div>
-                          </td>
-                          <td className="py-8 px-6 text-center">
-                            <div className="flex flex-col items-center">
-                              {tier.price === 'Contact Us' ? (
-                                <div className="text-lg font-semibold text-primary">
-                                  Contact Us
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="text-2xl font-bold text-dark mb-1">
-                                    {tier.price}
-                                  </div>
-                                  <div className="text-sm text-text font-medium">
-                                    {tier.period}
-                                  </div>
-                                </>
-                              )}
+                          </div>
+                        </td>
+                        <td className="py-8 px-6 text-center">
+                          <div className="flex flex-col items-center">
+                            <div className="text-2xl font-bold text-dark mb-1">
+                              {formatPrice(tier.amount)}
                             </div>
-                          </td>
-                          <td className="py-8 px-4 text-center text-text font-medium">
-                            {storage}
-                          </td>
-                          <td className="py-8 px-4 text-center text-text font-medium">
-                            {bandwidth}
-                          </td>
-                          <td className="py-8 px-4 text-center text-text font-medium">
-                            {bandwidthCost}
-                          </td>
-                          <td className="py-8 px-4 text-center text-text font-medium">
-                            {storageCost}
-                          </td>
-                          <td className="py-8 px-8 text-center">
-                            <button
-                              className="px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 mx-auto bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl"
+                            <div className="text-sm text-text font-medium">{formatExpiresAfter(tier.expiresAfter)}</div>
+                          </div>
+                        </td>
+                        <td className="py-8 px-4 text-center text-text font-medium">{formatStorage(tier.storage)}</td>
+                        <td className="py-8 px-4 text-center text-text font-medium">{formatBandwidth(tier.bandwidth)}</td>
+                        <td className="py-8 px-8 text-center">
+                          <button className="px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 mx-auto bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl">
+                            Purchase
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
                             >
-                              {tier.cta}
-                              {tier.cta !== 'Contact Sales' && (
-                                <svg
-                                  className="w-4 h-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M9 5l7 7-7 7"
-                                  />
-                                </svg>
-                              )}
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -267,94 +146,55 @@ const Pricing = () => {
 
           {/* Mobile Cards */}
           <div className="animate lg:hidden space-y-6">
-            {pricingTiers.map((tier, idx) => (
+            {pricingTiers.map((tier) => (
               <div
-                key={tier.name}
+                key={tier.id}
                 className="bg-white rounded-2xl shadow-[0px_4px_25px_rgba(0,0,0,.08)] p-8 border border-border transition-all duration-300 hover:shadow-[0px_8px_35px_rgba(0,0,0,.12)] hover:border-primary/30"
               >
-                {/* Header */}
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="text-xl font-semibold text-dark mb-2">
-                      {tier.name}
-                    </h3>
-                    <p className="text-sm text-text">{tier.description}</p>
+                    <h3 className="text-xl font-semibold text-dark mb-2">{tier.name}</h3>
+                    <p className="text-sm text-text">{tier.normalizedName || "Best for your needs"}</p>
                   </div>
                   <div className="text-right">
-                    {tier.price === 'Contact Us' ? (
-                      <div className="text-lg font-semibold text-primary">
-                        Contact Us
-                      </div>
-                    ) : (
-                      <>
-                        <div className="text-2xl font-bold text-dark">
-                          {tier.price}
-                        </div>
-                        <div className="text-sm text-text font-medium mt-1">
-                          {tier.period}
-                        </div>
-                      </>
-                    )}
+                    <div className="text-2xl font-bold text-dark">{formatPrice(tier.amount)}</div>
+                    <div className="text-sm text-text font-medium mt-1">{tier.expiresAfter}</div>
                   </div>
                 </div>
-                
-                {/* Features */}
+
                 <div className="space-y-3 mb-8">
-                  {tier.features.map((feature, i) => (
-                    <div key={i} className="flex items-start gap-3 text-text">
-                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
-                        <svg
-                          className="w-3 h-3 text-primary"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <span className="text-sm leading-relaxed">{feature}</span>
+                  <div className="flex items-start gap-3 text-text">
+                    <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-3 h-3 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
                     </div>
-                  ))}
+                    <span className="text-sm leading-relaxed">
+                      Storage: {formatStorage(tier.storage)}, Bandwidth: {formatBandwidth(tier.bandwidth)}
+                    </span>
+                  </div>
                 </div>
-                
-                {/* CTA Button */}
-                <button
-                  className="w-full py-4 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl"
-                >
-                  {tier.cta}
-                  {tier.cta !== 'Contact Sales' && (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  )}
+
+                <button className="w-full py-4 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary/90 shadow-lg hover:shadow-xl">
+                  Purchase
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
               </div>
             ))}
-          </div>
-
-          {/* Bottom CTA */}
-          <div className="animate text-center mt-16">
-            <p className="text-text mb-6">
-              Need a custom solution? We&#39;re here to help.
-            </p>
-            <button className="bg-theme-light text-dark px-8 py-3 rounded-lg font-medium hover:bg-primary hover:text-white transition-all duration-300 border border-border hover:border-primary">
-              Contact Sales
-            </button>
           </div>
         </div>
       </section>
