@@ -14,7 +14,7 @@ const VideoFrame = async () => {
       }}
       allowFullScreen
       sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; display-capture *;"
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; display-capture *;"
       src={url}
       loading="lazy"
     />
