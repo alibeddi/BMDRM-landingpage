@@ -19,12 +19,18 @@
       "url": "/about"
     },
     {
-      "name": "Blog",
-      "url": "/blog"
+      "name": "Pricing",
+      "url": "/pricing"
+    }
+  ],
+  "legal": [
+    {
+      "name": "Terms of Service",
+      "url": "/terms-of-service"
     },
     {
-      "name": "Terms & Conditions",
-      "url": "/terms-policy"
+      "name": "Privacy Policy",
+      "url": "/privacy-policy"
     }
   ]
 }
