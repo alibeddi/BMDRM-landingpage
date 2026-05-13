@@ -5,6 +5,7 @@ import theme from "@config/theme.json";
 import TwSizeIndicator from "@layouts/components/TwSizeIndicator";
 import { useEffect, useRef } from "react";
 import Header from "@layouts/partials/Header";
+import Footer from "@layouts/partials/Footer";
 import "../styles/style.scss";
 import Head from "next/head";
 
@@ -248,6 +249,7 @@ export default function RootLayout({ children }) {
         <div className="glow glow-2"></div>
         <div className="glow glow-3"></div>
         {children}
+        <Footer />
       </body>
     </html>
   );

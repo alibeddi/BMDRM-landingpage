@@ -39,7 +39,11 @@ async function fetchUrl() {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    console.error("Fetch failed:", response.status, response.statusText);
+    console.error("URL:", response.url);
+    const text = await response.text();
+    console.error("Response body:", text);
+    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
   }
 
   const data = await response.json();
