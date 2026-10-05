@@ -1,55 +1,65 @@
-"use client";
+import { ArrowIcon } from "@layouts/components/Icons";
 import { markdownify } from "@lib/utils/textConverter";
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import ImageFallback from "./ImageFallback";
+import fs from "fs";
+import Image from "next/image";
+import Link from "next/link";
+import path from "path";
 
-const CLIENTS = [
-  "/images/clients/ostedhy.svg",
-  "/images/clients/softylines.svg",
-  "/images/clients/taki.svg",
-  "/images/clients/webschool.svg",
-];
-const Clients = () => {
+// intrinsic size of a logo in /public, read from its SVG viewBox, so squarish
+// marks can be drawn taller than wide wordmarks and still look the same size
+const logoSize = (src) => {
+  try {
+    const svg = fs.readFileSync(
+      path.join(process.cwd(), "public", src),
+      "utf8",
+    );
+    const [, , w, h] = svg
+      .match(/viewBox="([^"]+)"/)[1]
+      .split(/[\s,]+/)
+      .map(Number);
+    return { width: Math.round(w), height: Math.round(h) };
+  } catch {
+    return { width: 190, height: 63 };
+  }
+};
+
+// Client logos, in their own colours, on a card over the striped band.
+const Clients = ({ clients }) => {
   return (
-    <div className="section  container">
-      <div className="animate text-center">
-        <p>Our clients</p>
-        {markdownify("Trusted by", "h2", "section-title mt-4")}
-      </div>
-      <div className="animate from-right  bg-white col-12 mt-16">
-        <Swiper
-          loop={true}
-          slidesPerView={3}
-          breakpoints={{
-            992: {
-              slidesPerView: 5,
-            },
-          }}
-          spaceBetween={20}
-          autoPlay={{ delay: 3000 }}
-        >
-          {CLIENTS.map((brand, index) => (
-            <SwiperSlide
-              className=" h-[max-content] cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
-              key={"brand-" + index}
-              autoPlay
-            >
-              <div className="relative h-[70px] w-[100px]">
-                <ImageFallback
-                  className="object-contain"
-                  src={brand}
-                  sizes="100vw"
-                  alt=""
-                  fill={true}
-                  priority={true}
+    <section className="clients pattern-stripes">
+      <div className="clients-card" data-reveal>
+        <div className="clients-head">
+          <div className="clients-heading" data-reveal-stagger>
+            <p className="kicker">{clients.kicker}</p>
+            {markdownify(clients.title, "h2")}
+            {markdownify(clients.description, "p", "text-ink/60")}
+          </div>
+          {clients.button && (
+            <Link href={clients.button.link} className="btn btn-primary">
+              {clients.button.label}
+              <ArrowIcon className="btn-arrow" />
+            </Link>
+          )}
+        </div>
+
+        <ul className="clients-grid" data-reveal-stagger>
+          {clients.list.map((client) => {
+            const { width, height } = logoSize(client.logo);
+            return (
+              <li key={client.name} className="clients-cell">
+                <Image
+                  src={client.logo}
+                  alt={client.name}
+                  width={width}
+                  height={height}
+                  className={`clients-logo ${width / height < 2 ? "is-square" : ""}`}
                 />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-    </div>
+    </section>
   );
 };
 

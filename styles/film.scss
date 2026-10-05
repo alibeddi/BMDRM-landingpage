@@ -1,0 +1,1028 @@
+// ============================================================================
+// The film (/film, layouts/film): a 1920×1080 stage scaled to the window,
+// in the landing page's papers and type. Paper colours come from
+// styles/origami.scss; these are the film's own props, captions and controls.
+// ============================================================================
+
+html.film-lock,
+html.film-lock body {
+  overflow: hidden;
+}
+
+.film-page {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: var(--cream);
+}
+
+.film {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--cream);
+  font-family: var(--font-primary), "Plus Jakarta Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.film-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--cream);
+  transform: translate(-50%, -50%) scale(var(--film-scale, 0.5));
+  transform-origin: 50% 50%;
+  opacity: 0;
+  transition: opacity 0.4s;
+
+  [data-ready] > & {
+    opacity: 1;
+  }
+}
+
+.film-capture .film-stage {
+  left: 0;
+  top: 0;
+  transform: none;
+  transition: none;
+}
+
+.film-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-primary), "Plus Jakarta Sans", sans-serif;
+}
+
+[data-shot] {
+  visibility: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// Captions (the hero's type, at film scale)
+// ---------------------------------------------------------------------------
+.film-captions {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cap {
+  position: absolute;
+  visibility: hidden;
+  color: var(--ink);
+}
+
+.cap-scrim {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 400px;
+  visibility: hidden;
+  background: linear-gradient(
+    to bottom,
+    rgba(247, 247, 242, 0.94) 0%,
+    rgba(247, 247, 242, 0.8) 42%,
+    rgba(247, 247, 242, 0) 100%
+  );
+}
+
+.cap-top {
+  top: 92px;
+  left: 50%;
+  width: 1500px;
+  margin-left: -750px;
+  text-align: center;
+}
+
+.cap-narrow {
+  width: 1240px;
+  margin-left: -620px;
+}
+
+.cap-tl {
+  top: 96px;
+  left: 140px;
+  width: 760px;
+}
+
+.cap-tr {
+  top: 96px;
+  right: 120px;
+  width: 720px;
+}
+
+.cap-kicker {
+  margin: 0 0 22px;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.cap-title {
+  margin: 0;
+  font-size: 66px;
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+
+  em {
+    font-family: var(--font-secondary), "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 1.08em;
+    letter-spacing: 0;
+    color: var(--brand-deep);
+  }
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+.cap-small .cap-title {
+  font-size: 52px;
+}
+
+// masked words rise from their baseline (as SplitWords on the site)
+.cap-w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0.1em 0.04em 0.18em;
+  margin: -0.1em -0.04em -0.18em;
+
+  > * {
+    display: inline-block;
+  }
+}
+
+// logo lockups
+.cap-logo {
+  left: 50%;
+  width: 1000px;
+  margin-left: -500px;
+  text-align: center;
+}
+
+.cap-logo-intro {
+  top: 286px;
+
+  .logo-pair {
+    width: 720px;
+  }
+}
+
+.logo-pair {
+  position: relative;
+  width: 640px;
+  aspect-ratio: 292 / 107;
+  margin: 0 auto;
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--ink);
+  }
+}
+
+.logo-mark {
+  clip-path: inset(-10% 66% -10% -10%);
+}
+
+.logo-word {
+  clip-path: inset(-10% 0% -10% 33%);
+}
+
+.logo-kicker {
+  margin: 44px 0 0;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.logo-tag {
+  margin: 22px 0 0;
+  font-size: 56px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+
+  span {
+    display: inline-block;
+  }
+}
+
+.cap-logo-final {
+  top: 96px;
+
+  .logo-pair {
+    width: 420px;
+  }
+
+  .logo-kicker {
+    margin-top: 26px;
+    font-size: 18px;
+  }
+
+  .logo-tag {
+    margin-top: 12px;
+    font-size: 42px;
+  }
+}
+
+.cap-eco {
+  bottom: 48px;
+  left: 50%;
+  width: 640px;
+  margin-left: -320px;
+  padding: 16px 36px 18px;
+  border: 1px solid rgba(22, 17, 43, 0.08);
+  border-radius: 28px;
+  background: #fcfcfa;
+  text-align: center;
+
+  .cap-kicker {
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: var(--brand);
+  }
+}
+
+.eco-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+
+  img {
+    display: block;
+    height: 46px;
+    width: auto;
+
+    & + img {
+      height: 70px;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Stage surfaces and kingdom details
+// ---------------------------------------------------------------------------
+.sh-cream { fill: #f7f7f2; }
+.sh-white { fill: #fdfbff; }
+.sh-lilac { fill: #efe9fd; }
+
+.sh-stripes {
+  fill: url(#fp-stripes);
+  opacity: 0.5;
+}
+
+.fw-hide { display: none; }
+
+.fw-frieze {
+  fill: none;
+  stroke: #b7a2f2;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.fw-glow {
+  fill: var(--brand-soft);
+  opacity: 0.55;
+}
+
+.fw-flash {
+  fill: none;
+  stroke: #8c57ff;
+  stroke-width: 8;
+}
+
+.fw-thread {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+}
+
+.fw-river {
+  fill: none;
+  stroke: #e6dcff;
+  stroke-width: 26;
+  stroke-linecap: round;
+}
+
+.fw-pulse {
+  fill: none;
+  stroke: #8c57ff;
+  stroke-width: 4;
+}
+
+.fw-env-glow {
+  fill: #e6dcff;
+  opacity: 0.85;
+}
+
+.fw-sight {
+  fill: none;
+  stroke: #b7a2f2;
+  stroke-width: 1.4;
+  stroke-dasharray: 1 1;
+}
+
+.fw-panel-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  fill: #57536a;
+}
+
+.fw-line {
+  fill: none;
+  stroke: #6c2aca;
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+}
+
+.fw-line-gold { stroke: #b98428; }
+
+.fw-area {
+  fill: #e6dcff;
+  opacity: 0.75;
+}
+
+.fw-area-gold {
+  fill: #f6d58a;
+  opacity: 0.55;
+}
+
+.fw-bar { fill: #d6c8fb; }
+.fw-bar-hi { fill: #8c57ff; }
+.fw-heat-0 { fill: #f1ecff; }
+.fw-heat-1 { fill: #d6c8fb; }
+.fw-heat-2 { fill: #b7a2f2; }
+.fw-heat-3 { fill: #6c2aca; }
+
+// ---------------------------------------------------------------------------
+// Film kit
+// ---------------------------------------------------------------------------
+.fc-drop {
+  fill: #16112b;
+  opacity: 0.08;
+}
+
+.fc-drop-soft { opacity: 0.06; }
+.fc-card { fill: #fffdf8; }
+
+.fc-card-stroke {
+  stroke: rgba(22, 17, 43, 0.22);
+  stroke-width: 1;
+}
+
+.fc-fold { fill: #dcd4ee; }
+.fc-play { fill: #6c2aca; }
+
+.fc-play-disc {
+  fill: #fffdf8;
+  opacity: 0.92;
+}
+
+.fc-file-text {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  fill: #16112b;
+}
+
+.fc-file-text-lg { font-size: 22px; }
+.fc-line { fill: #d6cbf3; }
+.fc-line-soft { fill: #ebe5fb; }
+
+.fc-diamond-line {
+  fill: none;
+  stroke: #d6c8fb;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 6;
+}
+
+.fc-flap-front {
+  fill: #fffdf8;
+  stroke: #e6dcff;
+  stroke-width: 1;
+}
+
+// the big sealed envelope gets paper edges, so it reads against the shield
+[data-k="sh-fold"] [class^="fc-flap-"] {
+  stroke: #fffdf8;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.fc-flap-0 { fill: #a47bff; }
+.fc-flap-1 { fill: #8c57ff; }
+.fc-flap-2 { fill: #4d0097; }
+.fc-flap-3 { fill: #6c2aca; }
+.fc-coral-d { fill: #d9555e; }
+
+.fc-seal-ring {
+  fill: none;
+  stroke: #ffa89e;
+  stroke-width: 2;
+  opacity: 0.85;
+}
+
+.fc-chip {
+  fill: #fffdf8;
+  stroke: rgba(22, 17, 43, 0.14);
+  stroke-width: 1;
+}
+
+.fc-chip-brand {
+  fill: #f1ecff;
+  stroke: #d6c8fb;
+}
+
+.fc-chip-coral {
+  fill: #fff0ee;
+  stroke: #ffa89e;
+}
+
+.fc-chip-text {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  fill: #16112b;
+}
+
+.fc-chip-text-brand { fill: #4d0097; }
+.fc-chip-text-coral { fill: #d9555e; }
+.fc-dot-gold { fill: #e3b04f; }
+.fc-dot-brand { fill: #8c57ff; }
+
+.fc-leader {
+  fill: none;
+  stroke: #6c2aca;
+  stroke-width: 1.4;
+  stroke-dasharray: 1 1;
+  opacity: 0.75;
+}
+
+.fc-leader-node {
+  fill: #fffdf8;
+  stroke: #6c2aca;
+  stroke-width: 2;
+}
+
+.fc-leader-rule {
+  fill: none;
+  stroke: #bab9b6;
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+
+.fc-leader-back {
+  fill: #fffdf8;
+  opacity: 0.86;
+}
+
+.fc-leader-text {
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  fill: #16112b;
+}
+
+.fc-fig {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  fill: #9a96a8;
+}
+
+.fc-step {
+  fill: #fffdf8;
+  stroke: rgba(22, 17, 43, 0.16);
+  stroke-width: 1;
+}
+
+.fc-step-on { fill: #6c2aca; }
+
+.fc-step-text {
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  fill: #57536a;
+}
+
+.fc-step-text-on { fill: #fffdf8; }
+
+.fc-step-arrow {
+  fill: none;
+  stroke: #b7a2f2;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fc-screen { fill: #8c57ff; }
+.fc-screen-play { fill: #fffdf8; }
+
+.fc-click circle {
+  fill: none;
+  stroke: #8c57ff;
+  stroke-width: 2.5;
+}
+
+.fc-cursor {
+  fill: #16112b;
+  stroke: #fffdf8;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.fc-gate-glow path { fill: #f6d58a; }
+.fc-glass { fill: #e6dcff; }
+
+.fc-glass-shelf {
+  stroke: #b7a2f2;
+  stroke-width: 1.2;
+}
+
+.fc-glass-book { fill: #8c57ff; }
+.fc-glass-book2 { fill: #fe7c7e; }
+.fc-paper-tile { fill: #fffdf8; }
+
+.fc-panel {
+  fill: #fffdf8;
+  stroke: rgba(22, 17, 43, 0.12);
+  stroke-width: 1;
+}
+
+.fc-live { fill: #fe7c7e; }
+.fc-stamp { fill: #6c2aca; }
+
+.fc-check {
+  fill: none;
+  stroke: #fffdf8;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fc-check-lg { stroke-width: 4.5; }
+
+// the great shield
+.fc-sh-0 { fill: #a47bff; }
+.fc-sh-1 { fill: #8c57ff; }
+.fc-sh-2 { fill: #7c45ec; }
+.fc-sh-3 { fill: #6c2aca; }
+.fc-sh-4 { fill: #5b1fb5; }
+.fc-sh-5 { fill: #4d0097; }
+
+.fc-shield-rim,
+.fc-shield-rim2 {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 1;
+}
+
+.fc-shield-rim {
+  stroke: #e3b04f;
+  stroke-width: 12;
+}
+
+.fc-shield-rim2 {
+  stroke: #f6d58a;
+  stroke-width: 2;
+  opacity: 0.85;
+}
+
+.fc-shield-glow {
+  fill: #b7a2f2;
+  opacity: 0.5;
+}
+
+// the protective pane
+.fc-pane {
+  fill: #e6dcff;
+  opacity: 0.82;
+}
+
+.fc-pane-glow {
+  fill: #8c57ff;
+  opacity: 0.12;
+}
+
+.fc-pane-hi {
+  fill: #fff;
+  opacity: 0.35;
+}
+
+.fc-pane-rim {
+  fill: none;
+  stroke: #6c2aca;
+  stroke-width: 3;
+}
+
+// the little film inside the player
+.mf-sky { fill: #e9e0ff; }
+.mf-sun { fill: #f6d58a; }
+.mf-far-l { fill: #b7a2f2; }
+.mf-far-d { fill: #8c6fe6; }
+.mf-wall-l { fill: #fffdf8; }
+.mf-wall-d { fill: #d6cbf3; }
+.mf-wall-m { fill: #efe9fd; }
+.mf-roof-l { fill: #8c57ff; }
+.mf-roof-d { fill: #4d0097; }
+.mf-door { fill: #2c0b58; }
+.mf-ground-l { fill: #f1ecff; }
+.mf-ground-d { fill: #e1d6fc; }
+.mf-cloud { fill: #fffdf8; }
+.mf-bird { fill: #6c2aca; }
+
+// player
+.pl-frame {
+  fill: #fffdf8;
+  stroke: rgba(22, 17, 43, 0.14);
+  stroke-width: 1;
+}
+
+.pl-accent { fill: var(--pl-accent, #6c2aca); }
+.pl-btn-icon { fill: #fffdf8; }
+.pl-track { fill: #ebe5fb; }
+
+.pl-knob {
+  fill: #fffdf8;
+  stroke: var(--pl-accent, #6c2aca);
+  stroke-width: 3;
+}
+
+.pl-icon { fill: #57536a; }
+
+.pl-icon-line {
+  fill: none;
+  stroke: #57536a;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pl-brand { fill: rgba(255, 253, 248, 0.9); }
+
+.pl-brand-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  fill: #16112b;
+}
+
+.pl-wm {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: #16112b;
+  opacity: 0.16;
+}
+
+.pl-sw-ring {
+  fill: none;
+  stroke: #16112b;
+  stroke-width: 2;
+}
+
+.pl-shape {
+  fill: #f1ecff;
+  stroke: #b7a2f2;
+}
+
+.pl-cap {
+  fill: none;
+  stroke: #fe7c7e;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.pl-cap-fill { fill: rgba(254, 124, 126, 0.06); }
+.pl-cap-block { fill: #efe9fd; }
+.pl-cap-pattern { opacity: 0.55; }
+.pl-rec { fill: #fe7c7e; }
+
+.pl-rec-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  fill: #d9555e;
+}
+
+// UI cards
+.ui-h {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  fill: #16112b;
+}
+
+.ui-p {
+  font-size: 18px;
+  fill: #57536a;
+}
+
+.ui-btn { fill: #6c2aca; }
+
+.ui-btn-text {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  fill: #fffdf8;
+}
+
+.ui-btn-ghost {
+  fill: none;
+  stroke: rgba(22, 17, 43, 0.2);
+  stroke-width: 1.2;
+}
+
+.ui-btn-text-ghost {
+  font-size: 16px;
+  font-weight: 600;
+  fill: #57536a;
+}
+
+.ui-count {
+  font-size: 16px;
+  font-weight: 600;
+  fill: #6c2aca;
+}
+
+.ui-sel {
+  fill: none;
+  stroke: #6c2aca;
+  stroke-width: 4;
+}
+
+// access
+.ac-ring {
+  fill: none;
+  stroke: #e6dcff;
+  stroke-width: 4;
+}
+
+.ac-notch { fill: #d6c8fb; }
+.ac-notch-on { fill: #8c57ff; }
+
+.ac-ring-done {
+  fill: none;
+  stroke: #6c2aca;
+  stroke-width: 5;
+  stroke-dasharray: 1 1;
+}
+
+// layers
+.ly-glow-disc {
+  fill: #f1ecff;
+  opacity: 0.95;
+}
+
+.ly-band { fill: #8c57ff; }
+
+// library
+.lb-bay { fill: #e4d9fe; }
+
+.lb-bay-arch {
+  fill: none;
+  stroke: #c3b5ec;
+  stroke-width: 6;
+}
+
+.lb-wall-top { fill: #e9e1fd; }
+.lb-dot { fill: #8c57ff; }
+.lb-dot-busy { fill: #fbf0d6; }
+
+.lb-spin-arc {
+  fill: none;
+  stroke: #b98428;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.lb-glass { fill: #e6dcff; }
+
+// intro and ingest
+.in-glow {
+  fill: #f1ecff;
+  opacity: 0.7;
+}
+
+.ig-glow {
+  fill: #e6dcff;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .in-dial,
+  .lb-spin {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+
+  .in-dial {
+    animation: o-spin 90s linear infinite;
+  }
+
+  .lb-spin {
+    animation: o-spin 1.2s linear infinite;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Transitions
+// ---------------------------------------------------------------------------
+.tr-sheet { fill: #fbf9ff; }
+
+.tr-shadow {
+  fill: #16112b;
+  opacity: 0.07;
+}
+
+.tr-crease { fill: #e6dcff; }
+.tr-crease-hi { fill: #fff; }
+
+.tr-rules path,
+.tr-frame-dash {
+  fill: none;
+  stroke: #cfcdc6;
+  stroke-width: 1.2;
+  stroke-dasharray: 6 6;
+}
+
+.tr-frame-solid {
+  fill: none;
+  stroke: #cfcdc6;
+  stroke-width: 1.2;
+}
+
+.tr-frame-node {
+  fill: #f7f7f2;
+  stroke: #bab9b6;
+  stroke-width: 1.2;
+}
+
+.tr-bloom { fill: #f7f3ff; }
+
+// ---------------------------------------------------------------------------
+// Controls
+// ---------------------------------------------------------------------------
+.film-start {
+  position: absolute;
+  left: 50%;
+  bottom: max(7vh, 72px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 26px 12px 12px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  transform: translateX(-50%);
+  transition:
+    background-color 0.25s,
+    color 0.25s,
+    transform 0.25s var(--ease-out);
+
+  &:hover {
+    background: var(--brand-deep);
+    color: var(--cream);
+    transform: translateX(-50%) translateY(-2px);
+  }
+}
+
+.film-start-disc {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--cream);
+
+  svg {
+    width: 22px;
+    margin-left: 3px;
+    fill: currentColor;
+  }
+}
+
+.film-start-label {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.film-start-meta {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.film-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(880px, calc(100vw - 32px));
+  padding: 6px 14px 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+  transition: opacity 0.45s;
+}
+
+.film-idle {
+  cursor: none;
+
+  .film-bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.film-btn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--brand-deep);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: var(--brand-mist);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+}
+
+.film-stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.film-range {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--brand);
+}
+
+.film-time {
+  flex: none;
+  min-width: 88px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.film-back {
+  flex: none;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+@media (max-width: 539px) {
+  .film-back,
+  .film-start-meta {
+    display: none;
+  }
+
+  .film-start {
+    padding-right: 20px;
+  }
+}

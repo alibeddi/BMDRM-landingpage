@@ -8,7 +8,6 @@ about_us:
   subtitle: WHO WE ARE
   title: Hello, We’re BMDRM Here For Your Help
   content: Welcome to BMDRM, the pioneering platform designed to provide secure video hosting and seamless streaming for your content. We are dedicated to ensuring that your videos are protected with advanced encryption, giving you peace of mind when sharing your work. 
-  image: /images/about/lock2.jpg
 
 ## our works
 works:
@@ -37,7 +36,6 @@ video:
   title: You Focus on Your Content, We Handle the Security.
   description: Safeguard your video creations and leave no room for doubt with our advanced encryption. Effortlessly share your videos while ensuring seamless access for your team, maintaining consistency across all interactions. At BMDRM, we take care of the security, so you can focus on delivering your message.
   video_id: dyZcRRWiuuw
-  thumbnail: /images/about/video-popup-2.jpg
 
 ## clients
 clients:

@@ -1,0 +1,24 @@
+// dashed rule, using the current --rule colour (falls back to --line)
+@function dashes($direction) {
+  @return repeating-linear-gradient(
+    $direction,
+    var(--rule, var(--line)) 0 var(--dash),
+    transparent var(--dash) calc(var(--dash) * 2)
+  );
+}
+
+@mixin dashed-sides {
+  background:
+    dashes(to bottom) left top / var(--hair) 100% no-repeat,
+    dashes(to bottom) right top / var(--hair) 100% no-repeat;
+}
+
+// fine diagonal hatch used for frames and pattern buttons
+@mixin hatch {
+  background-color: var(--brand-mist);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--brand-soft) 70%, transparent) 0 5px,
+    transparent 5px 11px
+  );
+}

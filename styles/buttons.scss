@@ -1,19 +1,39 @@
+// Oak-style buttons: small radius, uppercase, wide tracking, slow colour swap
 .btn {
-  @apply inline-block px-5 py-3 transition;
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[2px] border border-transparent px-[1.125rem] py-3 text-[.8125rem] font-medium uppercase leading-[.95] tracking-[.16em];
+  transition:
+    background-color 0.5s,
+    color 0.5s,
+    border-color 0.5s;
 }
 
 .btn-primary {
-  @apply bg-primary text-white rounded-[6px] h-12 overflow-hidden relative z-0;
+  @apply bg-brand-soft text-brand-deep hover:bg-brand-deep hover:text-cream;
+}
 
-  &::before {
-    @apply absolute content-[""] bg-black/10 w-full h-0 left-0 top-0 transition-all duration-300 -z-[1];
-  }
-
-  &:hover::before {
-    @apply bottom-0 top-auto h-full;
-  }
+.btn-secondary {
+  @apply bg-brand-deep text-cream hover:bg-brand-soft hover:text-brand-deep;
 }
 
 .btn-outline-primary {
-  @apply border-primary border bg-transparent hover:bg-primary hover:text-white;
+  @apply border-brand-deep bg-transparent text-brand-deep hover:bg-brand-deep hover:text-cream;
+}
+
+// sentence-case variants
+.btn-text {
+  @apply border-brand bg-transparent normal-case tracking-[.02em] text-brand hover:bg-brand hover:text-cream;
+}
+
+.btn-pattern {
+  @include hatch;
+  @apply border-brand-soft normal-case tracking-[.02em] text-dark hover:border-dark;
+}
+
+.btn-arrow {
+  @apply h-3.5 w-3.5 flex-none;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(3px);
 }

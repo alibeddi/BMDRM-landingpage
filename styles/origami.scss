@@ -1,0 +1,1042 @@
+// ============================================================================
+// Origami kingdom (layouts/components/origami)
+// Papers, scene tones and the motion primitives shared by every figure,
+// castle, machine and landscape. All loops run only without a reduced-motion
+// preference, and pause while their scene is off screen ([data-paused], set
+// by SceneObserver).
+// ============================================================================
+
+.origami-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+// zero specificity, so each scene sets its own size; figures may overhang
+// their box, scenes are cropped to theirs
+:where(.origami, .origami-scene) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+:where(.origami) {
+  overflow: visible;
+}
+
+:where(.origami-scene) {
+  overflow: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// Papers: light / mid / dark (x = deepest fold)
+// ---------------------------------------------------------------------------
+.o-shadow {
+  fill: #16112b;
+  opacity: 0.16;
+}
+
+.o-steel-l { fill: #dcd7e6; }
+.o-steel-m { fill: #b9b2cb; }
+.o-steel-d { fill: #8e86a6; }
+.o-steel-x { fill: #6c6488; }
+
+.o-violet-l { fill: #8c57ff; }
+.o-violet-m { fill: #6c2aca; }
+.o-violet-d { fill: #4d0097; }
+.o-violet-x { fill: #3a0a73; }
+
+.o-lilac-l { fill: #ece5ff; }
+.o-lilac-m { fill: #d6c8fb; }
+.o-lilac-d { fill: #b7a2f2; }
+
+.o-coral-l { fill: #ffa89e; }
+.o-coral-m { fill: #fe7c7e; }
+.o-coral-d { fill: #d9555e; }
+
+.o-gold-l { fill: #f6d58a; }
+.o-gold-m { fill: #e3b04f; }
+.o-gold-d { fill: #b98428; }
+
+// kraft paper for shafts, bows and machines
+.o-wood-l { fill: #d49a62; }
+.o-wood-m { fill: #b0763f; }
+.o-wood-d { fill: #80522a; }
+
+.o-paper-l { fill: #fffdf8; }
+.o-paper-m { fill: #efebe2; }
+.o-paper-d { fill: #d9d3c7; }
+
+.o-ink { fill: #1d1636; }
+
+// patterned papers (defined once in OrigamiDefs)
+.o-zebra { fill: url(#o-zebra); }
+.o-diamond { fill: url(#o-diamond); }
+.o-scales { fill: url(#o-scales); }
+.o-chev { fill: url(#o-chev); }
+
+// folds drawn over patterned facets
+.o-shade {
+  fill: #1b1030;
+  opacity: 0.22;
+}
+
+.o-shade2 {
+  fill: #1b1030;
+  opacity: 0.36;
+}
+
+.o-lift {
+  fill: #fff;
+  opacity: 0.18;
+}
+
+.o-crease {
+  fill: none;
+  stroke: #fff;
+  stroke-opacity: 0.35;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+// strings, shafts and ropes
+.o-bowlimb {
+  fill: none;
+  stroke: #80522a;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.o-bowlimb-hi {
+  fill: none;
+  stroke: #d49a62;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.o-bowstring {
+  fill: none;
+  stroke: #fffdf8;
+  stroke-width: 1;
+  stroke-opacity: 0.9;
+}
+
+.o-shaft {
+  fill: none;
+  stroke: #d49a62;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.o-rope {
+  fill: none;
+  stroke: #d49a62;
+  stroke-width: 1.6;
+  stroke-dasharray: 3 1.5;
+}
+
+.o-rein {
+  fill: none;
+  stroke: #fe7c7e;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+// ---------------------------------------------------------------------------
+// Scene tones: landscape and castle pieces read their papers from these
+// ---------------------------------------------------------------------------
+.origami-scene,
+.o-tone-day {
+  --far-l: #e8dffd;
+  --far-d: #d7caf8;
+  --snow-l: #fffdf8;
+  --snow-d: #efe9fd;
+  --back-l: #e4d9fe;
+  --back-d: #d2c3fa;
+  --mid-l: #d3c3fb;
+  --mid-d: #bda9f4;
+  --front-l: #f1ecff;
+  --front-d: #e1d6fc;
+  --wall-l: #fdfbff;
+  --wall-m: #efe9fd;
+  --wall-d: #d6cbf3;
+  --ledge: #c3b5ec;
+  --roof-l: #8c57ff;
+  --roof-d: #4d0097;
+  --win: #3a0a73;
+  --door: #2c0b58;
+  --bar: #e3b04f;
+  --leaf-l: #8c57ff;
+  --leaf-d: #5b1fb5;
+  --leaf-hi: #a47bff;
+  --trunk: #3a0a73;
+  --cloud-l: #fffdf8;
+  --cloud-d: #e6dcff;
+  --flag-l: #fe7c7e;
+  --flag-d: #d9555e;
+  --pole: #80522a;
+  --bird-l: #6c2aca;
+  --bird-d: #8c57ff;
+  --sentry: #3a0a73;
+  --stream: #fdfbff;
+  --stream-hi: #c9b8f6;
+  --pulse: #8c57ff;
+  --packet-l: #8c57ff;
+  --packet-d: #4d0097;
+  --particle: #b7a2f2;
+}
+
+// far away: everything melts into pale lilac
+.o-tone-haze {
+  --wall-l: #f2eefd;
+  --wall-m: #ebe5fc;
+  --wall-d: #dfd6f8;
+  --ledge: #d6ccf5;
+  --roof-l: #d2c4f8;
+  --roof-d: #bfaef3;
+  --win: #cdbff5;
+  --door: #c7b8f3;
+  --bar: #d2c4f8;
+  --leaf-l: #d6c8fb;
+  --leaf-d: #c4b3f4;
+  --leaf-hi: #e2d8fc;
+  --trunk: #c4b3f4;
+  --flag-l: #d6c8fb;
+  --flag-d: #c4b3f4;
+  --pole: #c4b3f4;
+}
+
+// night: dark papers, lit windows, gold light
+.o-tone-night {
+  --far-l: #231a45;
+  --far-d: #1c1539;
+  --snow-l: #3b2f6b;
+  --snow-d: #2f2458;
+  --back-l: #271e4d;
+  --back-d: #201842;
+  --mid-l: #2c2256;
+  --mid-d: #231a47;
+  --front-l: #1a1433;
+  --front-d: #150f2b;
+  --wall-l: #43357a;
+  --wall-m: #372b68;
+  --wall-d: #2b2155;
+  --ledge: #221a45;
+  --roof-l: #6c2aca;
+  --roof-d: #3a0a73;
+  --win: #f6d58a;
+  --door: #0e0a1d;
+  --bar: #b98428;
+  --leaf-l: #33286a;
+  --leaf-d: #251c4d;
+  --leaf-hi: #3e3278;
+  --trunk: #1a1433;
+  --cloud-l: #2e2459;
+  --cloud-d: #241c48;
+  --flag-l: #fe7c7e;
+  --flag-d: #d9555e;
+  --pole: #b0763f;
+  --sentry: #0e0a1d;
+  --stream: #3b2f6b;
+  --stream-hi: #a47bff;
+  --pulse: #f6d58a;
+  --packet-l: #a47bff;
+  --packet-d: #6c2aca;
+  --particle: #f6d58a;
+  --stone-l: #54469a;
+  --stone-li: #43357a;
+  --stone-d: #35295f;
+  --stone-di: #2a2150;
+  --disc: #1d1638;
+  --disc-fold: #171130;
+  --dial: #8c57ff;
+}
+
+@each $level in far, snow, back, mid, front {
+  .o-#{$level}-l { fill: var(--#{$level}-l); }
+  .o-#{$level}-d { fill: var(--#{$level}-d); }
+}
+
+.o-wall-l { fill: var(--wall-l); }
+.o-wall-m { fill: var(--wall-m); }
+.o-wall-d { fill: var(--wall-d); }
+.o-ledge { fill: var(--ledge); }
+.o-roof-l { fill: var(--roof-l); }
+.o-roof-d { fill: var(--roof-d); }
+.o-win { fill: var(--win); }
+.o-door { fill: var(--door); }
+.o-bar { fill: var(--bar); }
+.o-leaf-l { fill: var(--leaf-l); }
+.o-leaf-d { fill: var(--leaf-d); }
+.o-leaf-hi { fill: var(--leaf-hi); }
+.o-trunk { fill: var(--trunk); }
+.o-cloud-l { fill: var(--cloud-l); }
+.o-cloud-d { fill: var(--cloud-d); }
+.o-flag-l { fill: var(--flag-l); }
+.o-flag-d { fill: var(--flag-d); }
+.o-bird-l { fill: var(--bird-l); }
+.o-bird-d { fill: var(--bird-d); }
+.o-bird-body { fill: var(--bird-l); }
+.o-sentry { fill: var(--sentry); }
+.o-data { fill: var(--data, #3a0a73); }
+.o-led { fill: var(--led, #a47bff); }
+.o-packet-l { fill: var(--packet-l); }
+.o-packet-d { fill: var(--packet-d); }
+.o-packet-seal { fill: #fffdf8; }
+.o-particle { fill: var(--particle); }
+
+.o-cloud-crease {
+  fill: none;
+  stroke: var(--cloud-d);
+  stroke-width: 0.8;
+}
+
+.o-pole,
+.o-sentry-spear {
+  fill: none;
+  stroke: var(--pole);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.o-sentry-spear {
+  stroke: var(--sentry);
+  stroke-width: 0.8;
+}
+
+.o-moon-l { fill: #fffdf8; }
+.o-moon-d { fill: #e6dcff; }
+
+.o-moon-glow {
+  fill: #8c57ff;
+  opacity: 0.12;
+}
+
+.o-sun-glow {
+  fill: #f6d58a;
+  opacity: 0.22;
+}
+
+.o-star { fill: #e6dcff; }
+
+// the lock gate: arch stones, keystone, dial (night scenes darken them)
+.o-stone-lit { fill: var(--stone-l, #fffdf8); }
+.o-stone-lit-in { fill: var(--stone-li, #ebe4fb); }
+.o-stone-shade { fill: var(--stone-d, #e2d8fc); }
+.o-stone-shade-in { fill: var(--stone-di, #cdbff5); }
+.o-keystone { fill: #8c57ff; }
+.o-keystone-in { fill: #4d0097; }
+.o-dial-notch { fill: #fffdf8; }
+.o-gate-disc { fill: var(--disc, #fffdf8); }
+.o-gate-fold { fill: var(--disc-fold, #efeaf8); }
+
+.o-dial {
+  fill: none;
+  stroke: var(--dial, #6c2aca);
+}
+
+.o-mouse-tail {
+  fill: none;
+  stroke: #8e86a6;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.o-bowstring-bold {
+  stroke-width: 1.5;
+}
+
+.o-shaft-bold {
+  stroke-width: 2.6;
+}
+
+.o-gate-shadow {
+  fill: #1b1030;
+  opacity: 0.1;
+}
+
+// paper ribbons
+.o-stream-base,
+.o-stream-hi,
+.o-stream-pulse {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.o-stream-base {
+  stroke: var(--stream);
+  stroke-width: 7;
+}
+
+.o-stream-hi {
+  stroke: var(--stream-hi);
+  stroke-width: 1.2;
+  stroke-dasharray: 9 7;
+  opacity: 0.9;
+}
+
+.o-stream-pulse {
+  stroke: var(--pulse);
+  stroke-width: 3;
+  stroke-dasharray: 3 97;
+  stroke-dashoffset: 100;
+}
+
+// resting poses (kept with reduced motion)
+.o-rope-pull {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: rotate(-15.9deg);
+}
+
+// ---------------------------------------------------------------------------
+// Motion
+// ---------------------------------------------------------------------------
+@keyframes o-wave {
+  0%,
+  100% {
+    transform: skewY(0deg) scaleX(1);
+  }
+  50% {
+    transform: skewY(-6deg) scaleX(0.94);
+  }
+}
+
+@keyframes o-sway {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes o-cape {
+  from {
+    transform: skewX(-1.5deg);
+  }
+  to {
+    transform: skewX(1.5deg);
+  }
+}
+
+@keyframes o-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.018);
+  }
+}
+
+@keyframes o-nod {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(3deg);
+  }
+  60% {
+    transform: rotate(-1deg);
+  }
+}
+
+@keyframes o-swish {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes o-unfold-y {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+@keyframes o-unfold-x {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+// look around: glance back, then ahead, then settle
+@keyframes o-look {
+  0%,
+  30%,
+  86%,
+  100% {
+    transform: none;
+  }
+  38%,
+  52% {
+    transform: translateX(-1.5px) rotate(-5deg);
+  }
+  62%,
+  76% {
+    transform: translateX(1px) rotate(3deg);
+  }
+}
+
+// guard: lift the shield, hold, lower
+@keyframes o-raise {
+  0%,
+  55%,
+  92%,
+  100% {
+    transform: none;
+  }
+  64%,
+  84% {
+    transform: translateY(-12px) rotate(-3deg);
+  }
+}
+
+// archer: draw to the cheek, hold, ease back (never loosed)
+@keyframes o-draw {
+  0%,
+  50%,
+  94%,
+  100% {
+    transform: none;
+  }
+  62%,
+  82% {
+    transform: translateX(-22px);
+  }
+}
+
+@keyframes o-string-top {
+  0%,
+  50%,
+  94%,
+  100% {
+    transform: none;
+  }
+  62%,
+  82% {
+    transform: rotate(10.5deg);
+  }
+}
+
+@keyframes o-string-bot {
+  0%,
+  50%,
+  94%,
+  100% {
+    transform: none;
+  }
+  62%,
+  82% {
+    transform: rotate(-10.5deg);
+  }
+}
+
+// scout: sweep the horizon
+@keyframes o-scan {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25%,
+  35% {
+    transform: rotate(-6deg);
+  }
+  60%,
+  70% {
+    transform: rotate(3deg);
+  }
+}
+
+// catapult: wind the arm down against the rope, hold, ease home
+@keyframes o-pull {
+  0%,
+  10% {
+    transform: rotate(0deg);
+  }
+  48%,
+  62% {
+    transform: rotate(-26deg);
+  }
+  74% {
+    transform: rotate(2deg);
+  }
+  82%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes o-rope {
+  0%,
+  10%,
+  82%,
+  100% {
+    transform: rotate(-15.9deg);
+  }
+  48%,
+  62% {
+    transform: rotate(-29.7deg) scaleX(0.86);
+  }
+  74% {
+    transform: rotate(-14.8deg) scaleX(1.01);
+  }
+}
+
+@keyframes o-winch-pull {
+  0%,
+  10% {
+    transform: rotate(0deg);
+  }
+  48%,
+  62% {
+    transform: rotate(-220deg);
+  }
+  82%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+// ballista: small traverse and elevation
+@keyframes o-aim {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30%,
+  44% {
+    transform: rotate(-4deg);
+  }
+  68%,
+  80% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes o-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// portcullis: rise, stay open, come down
+@keyframes o-gate {
+  0%,
+  18%,
+  86%,
+  100% {
+    transform: scaleY(1);
+  }
+  34%,
+  70% {
+    transform: scaleY(0.16);
+  }
+}
+
+@keyframes o-tree {
+  from {
+    transform: rotate(-1.4deg);
+  }
+  to {
+    transform: rotate(1.4deg);
+  }
+}
+
+@keyframes o-drift {
+  to {
+    transform: translateX(var(--drift, 24px));
+  }
+}
+
+@keyframes o-float {
+  to {
+    transform: translateY(var(--float, -6px));
+  }
+}
+
+@keyframes o-flap {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(-0.55);
+  }
+}
+
+@keyframes o-glide {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--glide, 22px), -7px);
+  }
+}
+
+@keyframes o-hang {
+  from {
+    transform: rotate(-1.6deg);
+  }
+  to {
+    transform: rotate(1.6deg);
+  }
+}
+
+@keyframes o-dangle {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes o-pace {
+  to {
+    transform: translateX(var(--range, 18px));
+  }
+}
+
+@keyframes o-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.55;
+  }
+  48% {
+    opacity: 0.95;
+  }
+  70% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes o-blink {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  12%,
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes o-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes o-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  15%,
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) rotate(200deg);
+  }
+}
+
+@keyframes o-pulse {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes o-gait {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .o-wave,
+  .o-plume,
+  .o-tassel,
+  .o-cape,
+  .o-body,
+  .o-nod,
+  .o-swish,
+  .o-look,
+  .o-raise,
+  .o-string-top,
+  .o-string-bot,
+  .o-dangle,
+  .o-flag,
+  .o-hang,
+  .o-tree,
+  .o-wing,
+  .o-portcullis,
+  .o-particle {
+    transform-box: fill-box;
+  }
+
+  // flags on figures are attached on their right edge
+  .o-wave {
+    transform-origin: right center;
+    animation: o-wave 3.2s ease-in-out infinite;
+  }
+
+  .o-knight .o-plume {
+    transform-origin: left bottom;
+    animation: o-sway 4.5s ease-in-out infinite alternate;
+  }
+
+  .o-rider .o-plume,
+  .o-tassel {
+    transform-origin: right bottom;
+    animation: o-sway 4s ease-in-out infinite alternate;
+  }
+
+  .o-cape {
+    transform-origin: 50% 0;
+    animation: o-cape 5s ease-in-out infinite alternate;
+  }
+
+  .o-body {
+    transform-origin: 50% 100%;
+    animation: o-breathe 3.4s ease-in-out infinite;
+  }
+
+  .o-nod {
+    transform-origin: 0 100%;
+    animation: o-nod 4.2s ease-in-out infinite;
+  }
+
+  .o-swish {
+    transform-origin: 100% 0;
+    animation: o-swish 3s ease-in-out infinite alternate;
+  }
+
+  // contextual moments, offset per figure so a group never moves in unison
+  .o-look {
+    transform-origin: 50% 100%;
+    animation: o-look 11s ease-in-out infinite;
+  }
+
+  .o-archer .o-look {
+    animation-delay: -4s;
+  }
+
+  .o-guard .o-look {
+    animation-delay: -7s;
+  }
+
+  .o-raise {
+    transform-origin: 50% 100%;
+    animation: o-raise 9s ease-in-out infinite;
+  }
+
+  .o-draw {
+    animation: o-draw 10s ease-in-out infinite;
+  }
+
+  .o-string-top {
+    transform-origin: 50% 0;
+    animation: o-string-top 10s ease-in-out infinite;
+  }
+
+  .o-string-bot {
+    transform-origin: 50% 100%;
+    animation: o-string-bot 10s ease-in-out infinite;
+  }
+
+  .o-scan {
+    transform-box: view-box;
+    transform-origin: 146px 128px;
+    animation: o-scan 8s ease-in-out infinite;
+  }
+
+  .o-dangle {
+    transform-origin: 50% 0;
+    animation: o-dangle 2.8s ease-in-out infinite alternate;
+  }
+
+  // machines: parts turn around their own (0, 0)
+  .o-pull,
+  .o-rope-pull,
+  .o-winch,
+  .o-aim {
+    transform-box: view-box;
+    transform-origin: 0 0;
+  }
+
+  .o-pull {
+    animation: o-pull 9s ease-in-out infinite;
+  }
+
+  .o-rope-pull {
+    animation: o-rope 9s ease-in-out infinite;
+  }
+
+  .o-winch {
+    animation: o-spin 14s linear infinite;
+  }
+
+  .o-winch-pull {
+    animation: o-winch-pull 9s ease-in-out infinite;
+  }
+
+  .o-aim {
+    animation: o-aim 11s ease-in-out infinite;
+  }
+
+  // a lock gate's dial turning slowly on its own
+  .o-dial-turn {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation: o-spin 60s linear infinite;
+  }
+
+  // environment
+  .o-flag {
+    transform-origin: left center;
+    animation: o-wave 2.8s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-hang {
+    transform-origin: 50% 0;
+    animation: o-hang 5s ease-in-out infinite alternate;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-tree {
+    transform-origin: 50% 100%;
+    animation: o-tree 5.5s ease-in-out infinite alternate;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-cloud {
+    animation: o-drift var(--dur, 30s) ease-in-out infinite alternate;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-float {
+    animation: o-float var(--dur, 6s) ease-in-out infinite alternate;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-bird {
+    animation: o-glide 9s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-wing {
+    transform-origin: 50% 100%;
+    animation: o-flap 0.9s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -0.37);
+  }
+
+  .o-portcullis {
+    transform-origin: 50% 0;
+    animation: o-gate 14s ease-in-out infinite;
+  }
+
+  .o-pace {
+    animation: o-pace 7s ease-in-out infinite alternate;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-win-lit {
+    animation: o-flicker 6s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-led {
+    animation: o-blink 2.6s steps(1, end) infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-star {
+    animation: o-twinkle 4s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-particle {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    animation: o-rise var(--dur, 8s) ease-out infinite;
+    animation-delay: calc(var(--delay, 0s) * -1);
+  }
+
+  .o-stream-pulse {
+    animation: o-pulse var(--dur, 3s) linear infinite;
+  }
+
+  .o-gait {
+    animation: o-gait 0.9s ease-in-out infinite;
+  }
+
+  // CSS fold-in for figures already on screen at load (the hero); figures
+  // further down unfold with GSAP when scrolled into view
+  .o-unfold .o-part {
+    transform-box: fill-box;
+    animation: o-unfold-y 0.8s cubic-bezier(0.3, 1.45, 0.5, 1) both;
+    animation-delay: calc(var(--o-delay, 1s) + var(--o-i, 0) * 70ms);
+
+    &[data-fold="up"] {
+      transform-origin: 50% 100%;
+    }
+
+    &[data-fold="down"] {
+      transform-origin: 50% 0;
+    }
+
+    &[data-fold="left"] {
+      transform-origin: 100% 50%;
+      animation-name: o-unfold-x;
+    }
+
+    &[data-fold="right"] {
+      transform-origin: 0 50%;
+      animation-name: o-unfold-x;
+    }
+  }
+
+  @for $i from 2 through 16 {
+    .o-unfold .o-part:nth-child(#{$i}) {
+      --o-i: #{$i - 1};
+    }
+  }
+}
+
+// no travelling packages or rising flecks without motion
+@media (prefers-reduced-motion: reduce) {
+  .o-packets,
+  .o-particle {
+    display: none;
+  }
+}
+
+// off-screen scenes hold still (SceneObserver toggles data-paused)
+[data-paused],
+[data-paused] * {
+  animation-play-state: paused !important;
+}

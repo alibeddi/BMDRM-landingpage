@@ -1,0 +1,378 @@
+// ============================================================================
+// Blueprint design system (inspired by oak.id)
+// Imported outside Tailwind's @layer blocks so classes toggled at runtime are
+// never purged, and before `@tailwind utilities` so utilities still win.
+// ============================================================================
+
+:root {
+  // palette (single source: config/theme.json → tailwind)
+  --cream: theme("colors.cream.DEFAULT");
+  --cream-deep: theme("colors.cream.deep");
+  --paper: theme("colors.paper");
+  --ink: theme("colors.ink");
+  --brand: theme("colors.brand.DEFAULT");
+  --brand-deep: theme("colors.brand.deep");
+  --brand-bright: theme("colors.brand.bright");
+  --brand-soft: theme("colors.brand.soft");
+  --brand-mist: theme("colors.brand.mist");
+  --night: theme("colors.night.DEFAULT");
+  --night-soft: theme("colors.night.soft");
+  --coral: theme("colors.coral");
+  --haze: theme("colors.haze");
+  --ink-muted: color-mix(in srgb, var(--ink) 60%, transparent);
+
+  // frame geometry
+  --gutter: 2.5rem; // page edge → solid rule
+  --frame-max: 90rem;
+  --frame-pad: 4rem; // solid rule → dashed rule
+  --frame-inner: clamp(1rem, 3vw, 3rem); // dashed rule → content
+  --hair: 1px;
+  --dash: 6px;
+  --line: #cfcdc6;
+  --node: #dcd5ec;
+
+  // header
+  --header-offset: 1.75rem;
+  --header-h: 3.75rem;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+// hairline rules on high-density screens, like the original
+@media (min-resolution: 2dppx) {
+  :root {
+    --hair: 0.5px;
+    --line: #bab9b6;
+  }
+}
+
+@media (max-width: 991px) {
+  :root {
+    --frame-pad: 2.5rem;
+    --frame-inner: 0rem;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --gutter: 0.625rem;
+    --frame-pad: 1.25rem;
+    --header-offset: 0.625rem;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --frame-pad: 0.875rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dashed rules
+// ---------------------------------------------------------------------------
+.dash-top,
+.dash-btm {
+  position: relative;
+}
+
+.dash-top::before,
+.dash-btm::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--hair);
+  background: dashes(to right);
+  pointer-events: none;
+}
+
+.dash-top::before {
+  top: 0;
+}
+
+.dash-btm::after {
+  bottom: 0;
+}
+
+.dash-sides {
+  @include dashed-sides;
+}
+
+// ---------------------------------------------------------------------------
+// Frame
+// ---------------------------------------------------------------------------
+.frame {
+  padding-inline: var(--gutter);
+}
+
+.frame-solid {
+  width: 100%;
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  padding-inline: var(--frame-pad);
+  border-inline: var(--hair) solid var(--rule, var(--line));
+}
+
+.frame-dash {
+  @include dashed-sides;
+  padding-inline: var(--frame-inner);
+}
+
+// on light-on-dark surfaces
+.rules-light {
+  --rule: rgba(252, 252, 250, 0.55);
+  --node: rgba(252, 252, 250, 0.7);
+}
+
+// ---------------------------------------------------------------------------
+// Divider
+// ---------------------------------------------------------------------------
+.divider {
+  padding-inline: var(--gutter);
+}
+
+.divider-inner {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  border-inline: var(--hair) solid var(--rule, var(--line));
+}
+
+.divider-side {
+  position: relative;
+  flex: none;
+  width: var(--frame-pad);
+  height: 4rem;
+}
+
+.divider-middle {
+  flex: 1;
+}
+
+.divider-diag {
+  position: absolute;
+  bottom: 0;
+  width: 141.42%;
+  height: var(--hair);
+
+  i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: dashes(to right);
+  }
+}
+
+.divider-node {
+  position: absolute;
+  z-index: 1;
+  bottom: -0.25rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--node);
+}
+
+// default: "/" on the left and "\" on the right, corner squares at the bottom
+.divider-side:first-child {
+  .divider-diag {
+    left: 0;
+    transform-origin: 0 50%;
+    transform: rotate(-45deg);
+
+    i {
+      transform-origin: 0 50%;
+    }
+  }
+
+  .divider-node {
+    left: -0.25rem;
+  }
+}
+
+.divider-side:last-child {
+  .divider-diag {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotate(45deg);
+
+    i {
+      transform-origin: 100% 50%;
+    }
+  }
+
+  .divider-node {
+    right: -0.25rem;
+  }
+}
+
+// flipped: "\" on the left and "/" on the right, corner squares at the top
+.divider-flip {
+  .divider-diag {
+    top: 0;
+    bottom: auto;
+  }
+
+  .divider-node {
+    top: -0.25rem;
+    bottom: auto;
+  }
+
+  .divider-side:first-child .divider-diag {
+    transform: rotate(45deg);
+  }
+
+  .divider-side:last-child .divider-diag {
+    transform: rotate(-45deg);
+  }
+}
+
+// small screens: a single dashed outer rule, no chamfers
+@media (max-width: 991px) {
+  .dash-sides,
+  .frame-dash {
+    background-image: none;
+  }
+
+  .frame-solid,
+  .divider-inner {
+    border-inline: 0;
+    @include dashed-sides;
+  }
+
+  .divider-diag,
+  .divider-node {
+    display: none;
+  }
+
+  .divider-side {
+    height: 3rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Kicker (small uppercase label above headings)
+// ---------------------------------------------------------------------------
+.kicker {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kicker, var(--brand));
+}
+
+// ---------------------------------------------------------------------------
+// Patterns
+// ---------------------------------------------------------------------------
+.pattern-hatch {
+  @include hatch;
+}
+
+// organic "zebra" stripes and "leopard" spots, generated as seamless tiles
+.pattern-stripes {
+  background-color: #efe9fd;
+  background-image: url("/images/patterns/stripes-lilac.svg");
+  background-size: 360px;
+}
+
+.pattern-spots {
+  background-color: var(--haze);
+  background-image: url("/images/patterns/spots-haze.svg");
+  background-size: 360px;
+}
+
+// ---------------------------------------------------------------------------
+// Framed media (screenshots, video covers)
+// ---------------------------------------------------------------------------
+.media-frame {
+  position: relative;
+  padding: 0.5rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.625rem;
+  @include hatch;
+}
+
+.media-frame-inner {
+  position: relative;
+  overflow: hidden;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.375rem;
+  background: var(--paper);
+}
+
+// ---------------------------------------------------------------------------
+// Text reveal primitives (see SplitWords)
+// ---------------------------------------------------------------------------
+.split-word {
+  display: inline-block;
+}
+
+// masked word: clips the word so it can rise from the baseline
+.split-mask .split-word {
+  overflow: hidden;
+  vertical-align: top;
+  // room for ascenders/descenders without changing the line box
+  padding: 0.1em 0.04em 0.16em;
+  margin: -0.1em -0.04em -0.16em;
+
+  > span {
+    display: inline-block;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes word-up {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  // page-load entrance, staggered with --i
+  .rise {
+    animation: rise 1s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+  }
+
+  .split-mask.rise-words .split-word > span {
+    animation: word-up 1.05s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 60ms + 180ms);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Page banner landscape (BannerScene)
+// ---------------------------------------------------------------------------
+.banner-land {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.banner-scene {
+  width: 100%;
+}
+
+.banner-scene-kingdom {
+  height: clamp(150px, 21vw, 280px);
+}
+
+.banner-scene-hills {
+  height: clamp(84px, 11vw, 150px);
+}

@@ -39,3 +39,7 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# the BMDRM film: rendered video and its generated score (npm run film:render)
+/exports/
+/public/film/

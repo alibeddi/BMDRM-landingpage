@@ -1,114 +1,95 @@
+"use client";
+
 import Logo from "@components/Logo";
 import config from "@config/config.json";
 import menu from "@config/menu.json";
+import { openChat } from "@lib/utils/chat";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { CgClose } from "react-icons/cg";
 
 const Header = () => {
   // Destructuring the main menu from menu object
   const { main } = menu;
+  const { nav_button } = config;
 
   // States and refs declaration
   const [showMenu, setShowMenu] = useState(false);
-  const [sticky, setSticky] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef(null);
-  const menuRef = useRef(null); // Ref for the menu container
-  const [direction, setDirection] = useState(null);
 
   const pathname = usePathname();
-  const asPath = pathname;
 
-  const handleChatboxClick = () => {
-    const chatboxElement = document.querySelector(".chatbox-logo");
-    if (chatboxElement) {
-      chatboxElement.click();
-    } else {
-      console.warn("Chatbox element not found.");
-    }
-  };
-
-  // Sticky header
+  // Settle the header into a solid bar once the page scrolls
   useEffect(() => {
-    const header = headerRef.current;
-    const headerHeight = header.clientHeight + 200;
-    let prevScroll = 0;
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      scrollY > 0 ? setSticky(true) : setSticky(false);
-      if (scrollY > headerHeight) {
-        prevScroll > scrollY ? setDirection(-1) : setDirection(1);
-        prevScroll = scrollY;
-      } else {
-        setDirection(null);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 8);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menu on outside click
+  // Close the mobile menu on navigation
   useEffect(() => {
+    setShowMenu(false);
+  }, [pathname]);
+
+  // Close the mobile menu on outside click or Escape
+  useEffect(() => {
+    if (!showMenu) return;
+
     const handleClickOutside = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        showMenu
-      ) {
+      if (headerRef.current && !headerRef.current.contains(event.target)) {
         setShowMenu(false);
       }
     };
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setShowMenu(false);
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [showMenu]);
 
-  // Logo source
-  const { logo } = config.site;
-
   return (
     <>
-      <div className="header-height-fix"></div>
+      <div className="header-height-fix" aria-hidden="true"></div>
       <header
-        className={`header ${sticky ? "header-sticky" : ""} ${
-          direction === 1 ? "unpinned" : "pinned"
-        }`}
         ref={headerRef}
+        className={`header dash-top dash-btm ${scrolled ? "is-scrolled" : ""} ${
+          showMenu ? "is-open" : ""
+        }`}
       >
-        <nav className="navbar container-xl">
+        <nav className="header-bar" aria-label="Main">
           {/* Logo */}
-          <div className="ml-[-40px] order-0 flex gap-2">
-            <Logo src={logo} />
-          </div>
+          <Logo />
 
           {/* Menu */}
-          <ul
-            id="nav-menu"
-            className={`navbar-nav order-2 w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex ${
-              !showMenu && "hidden"
-            }`}
-            ref={menuRef} // Attach ref to the menu
-          >
+          <ul id="nav-menu" className="nav-menu">
             {main.map((menu, i) => (
               <React.Fragment key={`menu-${i}`}>
                 {menu.hasChildren ? (
-                  <li className="nav-item nav-dropdown group relative">
-                    <span className="nav-link inline-flex items-center">
+                  <li className="nav-item nav-dropdown">
+                    <span className="nav-link" tabIndex={0}>
                       {menu.name}
-                      <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                      <svg
+                        className="h-3 w-3 fill-current"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                      >
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                       </svg>
                     </span>
-                    <ul className="nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500 group-hover:block group-hover:max-h-[106px] group-hover:py-2 lg:invisible lg:absolute lg:left-1/2 lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100">
+                    <ul className="nav-dropdown-list">
                       {menu.children.map((child, i) => (
-                        <li className="nav-dropdown-item" key={`children-${i}`}>
+                        <li key={`children-${i}`}>
                           <Link
                             href={child.url}
-                            className={`nav-dropdown-link block transition-all ${
-                              asPath === child.url && "active"
+                            className={`nav-dropdown-link ${
+                              pathname === child.url ? "active" : ""
                             }`}
                           >
                             {child.name}
@@ -121,9 +102,10 @@ const Header = () => {
                   <li className="nav-item">
                     <Link
                       href={menu.url}
-                      className={`nav-link block ${
-                        asPath === menu.url && "active"
+                      className={`nav-link ${
+                        pathname === menu.url ? "active" : ""
                       }`}
+                      aria-current={pathname === menu.url ? "page" : undefined}
                     >
                       {menu.name}
                     </Link>
@@ -131,54 +113,42 @@ const Header = () => {
                 )}
               </React.Fragment>
             ))}
-            {config.nav_button.enable && (
-              <li className="nav-item lg:hidden">
-                <Link
-                  className="btn btn-primary hidden lg:flex"
-                  href={config.nav_button.link}
+            {nav_button.enable && (
+              <li className="nav-menu-cta">
+                <button
+                  type="button"
+                  className="btn btn-primary w-full"
+                  onClick={openChat}
                 >
-                  {config.nav_button.label}
-                </Link>
+                  {nav_button.label}
+                </button>
               </li>
             )}
           </ul>
-          <div className="order-1 ml-auto flex items-center md:ml-0">
-            {config.nav_button.enable && (
-              <div
-                onClick={handleChatboxClick}
-                className="btn btn-primary hidden lg:flex"
+
+          <div className="header-actions">
+            {nav_button.enable && (
+              <button
+                type="button"
+                className="btn btn-primary max-lg:hidden"
+                onClick={openChat}
               >
-                {config.nav_button.label}
-              </div>
+                {nav_button.label}
+              </button>
             )}
 
             {/* Navbar toggler */}
-            {showMenu ? (
-              <button
-                className="h-8 w-8 text-3xl text-dark lg:hidden"
-                onClick={() => setShowMenu(!showMenu)}
-              >
-                <CgClose />
-              </button>
-            ) : (
-              <button
-                className="text-dark lg:hidden"
-                onClick={() => setShowMenu(!showMenu)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  width="32px"
-                  height="32px"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M 5 5 L 5 11 L 11 11 L 11 5 L 5 5 z M 13 5 L 13 11 L 19 11 L 19 5 L 13 5 z M 21 5 L 21 11 L 27 11 L 27 5 L 21 5 z M 7 7 L 9 7 L 9 9 L 7 9 L 7 7 z M 15 7 L 17 7 L 17 9 L 15 9 L 15 7 z M 23 7 L 25 7 L 25 9 L 23 9 L 23 7 z M 5 13 L 5 19 L 11 19 L 11 13 L 5 13 z M 13 13 L 13 19 L 19 19 L 19 13 L 13 13 z M 21 13 L 21 19 L 27 19 L 27 13 L 21 13 z M 7 15 L 9 15 L 9 17 L 7 17 L 7 15 z M 15 15 L 17 15 L 17 17 L 15 17 L 15 15 z M 23 15 L 25 15 L 25 17 L 23 17 L 23 15 z M 5 21 L 5 27 L 11 27 L 11 21 L 5 21 z M 13 21 L 13 27 L 19 27 L 19 21 L 13 21 z M 21 21 L 21 27 L 27 27 L 27 21 L 21 21 z M 7 23 L 9 23 L 9 25 L 7 25 L 7 23 z M 15 23 L 17 23 L 17 25 L 15 25 L 15 23 z"
-                  />
-                </svg>
-              </button>
-            )}
-            {/* /Navbar toggler */}
+            <button
+              type="button"
+              className="nav-toggle"
+              aria-controls="nav-menu"
+              aria-expanded={showMenu}
+              aria-label={showMenu ? "Close menu" : "Open menu"}
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              <span />
+              <span />
+            </button>
           </div>
         </nav>
       </header>

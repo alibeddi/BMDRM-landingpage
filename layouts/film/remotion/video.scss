@@ -1,0 +1,56 @@
+// Styles for the video composition: the film's own stylesheets, plus the
+// design tokens and base type that the site provides through Tailwind
+// (styles/frame.scss, styles/base.scss) — copied here as plain values.
+:root {
+  --cream: #f7f7f2;
+  --cream-deep: #f0efe8;
+  --paper: #fcfcfa;
+  --ink: #16112b;
+  --brand: #6c2aca;
+  --brand-deep: #4d0097;
+  --brand-bright: #8c57ff;
+  --brand-soft: #e6dcff;
+  --brand-mist: #f1ecff;
+  --night: #130e26;
+  --night-soft: #1d1638;
+  --coral: #fe7c7e;
+  --haze: #b8b2c8;
+  --ink-muted: color-mix(in srgb, var(--ink) 60%, transparent);
+  --line: #cfcdc6;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --font-primary: "Plus Jakarta Sans";
+  --font-secondary: "Instrument Serif";
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: #f7f7f2;
+}
+
+// the site's body type (Tailwind preflight + styles/base.scss)
+.film {
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  img,
+  svg {
+    display: block;
+  }
+}
+
+@import "../../../styles/origami";
+@import "../../../styles/film";

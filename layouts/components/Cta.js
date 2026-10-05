@@ -1,86 +1,55 @@
-"use client";
 import config from "@config/config.json";
+import ChatButton from "@layouts/components/ChatButton";
+import { Divider, Frame } from "@layouts/components/Frame";
+import { ArrowIcon } from "@layouts/components/Icons";
+import { HangingBanner, OrigamiScene } from "@layouts/components/origami";
 import { markdownify } from "@lib/utils/textConverter";
 import Link from "next/link";
-import Circle from "./Circle";
-import ImageFallback from "./ImageFallback";
 
-const Cta = () => {
-  const { title, content, button, enable } = config.call_to_action;
-  const handleChatboxClick = () => {
-    const chatboxElement = document.querySelector(".chatbox-logo");
-    if (chatboxElement) {
-      chatboxElement.click();
-    } else {
-      console.warn("Chatbox element not found.");
-    }
+// heraldic banner hanging from the section's top rule
+const Banner = ({ delay = 0 }) => (
+  <OrigamiScene viewBox="0 0 80 190" className="cta-banner">
+    <g className="o-part" data-fold="down">
+      <HangingBanner x={40} y={8} w={46} h={150} delay={delay} />
+    </g>
+  </OrigamiScene>
+);
+
+// `data` overrides config.call_to_action for a single page
+const Cta = ({ data }) => {
+  const { enable, kicker, title, content, button, secondary_button } = {
+    ...config.call_to_action,
+    ...data,
   };
-  if (!enable) return;
+  if (!enable) return null;
 
   return (
-    <section className="cta section pt-0">
-      <div className="container-xl">
-        <div className="section relative px-4 text-center">
-          <div className="animate">
-            {markdownify("GET BMDRM NOW", "h2", "section-title")}
-            {markdownify(
-              "Our secure video hosting platform ensures your content is protected with advanced encryption and seamless",
-              "p",
-              "mt-10",
+    <>
+      <Divider />
+      <Frame className="cta" innerClassName="cta-inner py-20 md:py-28">
+        <div className="cta-banners" aria-hidden="true">
+          <Banner />
+          <Banner delay={2.5} />
+        </div>
+        <div className="cta-content" data-reveal-stagger>
+          {kicker && <p className="kicker">{kicker}</p>}
+          {markdownify(title, "h2", "cta-title")}
+          {markdownify(content, "p", "cta-text")}
+          <div className="cta-actions">
+            <ChatButton className="btn btn-pattern">
+              {button.label}
+              <ArrowIcon className="btn-arrow" />
+            </ChatButton>
+            {secondary_button && (
+              <Link href={secondary_button.link} className="btn btn-text">
+                {secondary_button.label}
+              </Link>
             )}
-            <div
-              onClick={handleChatboxClick}
-              className="btn cursor-pointer btn-primary mt-10"
-            >
-              Contact us now
-            </div>
-          </div>
-          <div className="bg-theme animated-bg absolute top-0 left-0 w-full after:hidden">
-            <ImageFallback
-              src="/images/wave.svg"
-              fill={true}
-              sizes="100vw"
-              alt="bg wave"
-            />
-            <Circle
-              className="hidden md:block left-[10%] top-12"
-              width={32}
-              height={32}
-              fill={false}
-            />
-            <Circle
-              className="hidden md:block left-[3%] bottom-[13%]"
-              width={85}
-              height={85}
-            />
-            <Circle
-              className="hidden md:block left-[15%] bottom-[35%]"
-              width={47}
-              height={47}
-              fill={false}
-            />
-
-            <Circle
-              className="hidden md:block right-[12%] top-[12%]"
-              width={20}
-              height={20}
-            />
-            <Circle
-              className="hidden md:block right-[2%] bottom-[30%]"
-              width={73}
-              height={73}
-              fill={false}
-            />
-            <Circle
-              className="hidden md:block right-[19%] bottom-[16%]"
-              width={37}
-              height={37}
-              fill={false}
-            />
           </div>
         </div>
-      </div>
-    </section>
+      </Frame>
+      <Divider flip />
+    </>
   );
 };
 

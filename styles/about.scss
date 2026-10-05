@@ -1,0 +1,217 @@
+// ============================================================================
+// About page
+// ============================================================================
+
+// who we are
+.about-intro {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 3rem 5rem;
+}
+
+.about-intro-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 36rem;
+}
+
+.about-intro-text {
+  font-size: 1.0625rem;
+  color: var(--ink-muted);
+}
+
+.about-photo {
+  justify-self: center;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.about-photo-mat {
+  padding: 0.625rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--paper);
+}
+
+.about-photo-clip {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background: var(--cream-deep);
+}
+
+// the "who we are" diorama fills the portrait frame
+.who-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.who-sky {
+  fill: #f3effe;
+}
+
+.about-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.875rem;
+  padding-inline: 0.25rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+// what we do: heading beside the watchtower diorama, then a blueprint grid
+.about-works-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.about-guard {
+  flex: none;
+  width: min(42%, 22rem);
+}
+
+.about-works {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background:
+    dashes(to right) left top / 100% var(--hair) no-repeat,
+    dashes(to right) left bottom / 100% var(--hair) no-repeat;
+}
+
+// stacked list by default (phones), 2 x 2 grid of cells from tablets up
+.about-work {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem 0.5rem;
+
+  & + & {
+    background: dashes(to right) left top / 100% var(--hair) no-repeat;
+  }
+}
+
+@media (min-width: 768px) {
+  .about-work {
+    padding: 2.5rem 2rem;
+
+    &:nth-child(2) {
+      background: dashes(to bottom) left top / var(--hair) 100% no-repeat;
+    }
+
+    &:nth-child(3) {
+      background: dashes(to right) left top / 100% var(--hair) no-repeat;
+    }
+
+    &:nth-child(4) {
+      background:
+        dashes(to bottom) left top / var(--hair) 100% no-repeat,
+        dashes(to right) left top / 100% var(--hair) no-repeat;
+    }
+  }
+}
+
+.about-work-title {
+  font-size: 1.375rem;
+  line-height: 1.25;
+}
+
+.about-work-text {
+  color: var(--ink-muted);
+}
+
+// short video
+.about-video {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: center;
+  gap: 3rem 4rem;
+}
+
+.about-video-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// the scout stands on the video card's top edge (room above it on desktop)
+.about-video-media {
+  position: relative;
+}
+
+.about-scout {
+  position: absolute;
+  z-index: 1;
+  right: 8%;
+  bottom: calc(100% - 0.5rem);
+  display: none;
+  width: clamp(6rem, 9vw, 8rem);
+  pointer-events: none;
+}
+
+@media (min-width: 992px) {
+  .about-scout {
+    display: block;
+  }
+}
+
+@media (max-width: 991px) {
+  .about-intro,
+  .about-video {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-intro-content,
+  .about-video-content {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .about-works-head {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .about-guard {
+    align-self: center;
+    width: min(80%, 18rem);
+  }
+
+  .about-works {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================================================
+// Not found
+// ============================================================================
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.not-found-scout {
+  width: clamp(7rem, 14vw, 10rem);
+}
+
+.not-found-text h2 {
+  margin: 0;
+}

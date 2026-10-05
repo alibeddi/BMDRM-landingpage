@@ -1,5 +1,20 @@
+@import "mixins";
+
 @tailwind base;
 @tailwind components;
+
+// Blueprint design system. Plain CSS rather than @layer so runtime state
+// classes are never purged; it sits before utilities so utilities can override it.
+@import "frame";
+@import "buttons";
+@import "navigation";
+@import "footer";
+@import "home";
+@import "pricing";
+@import "about";
+@import "origami";
+@import "film";
+
 @tailwind utilities;
 
 @layer base {
@@ -8,8 +23,6 @@
 
 @layer components {
   @import "components";
-  @import "navigation";
-  @import "buttons";
 }
 
 @layer utilities {

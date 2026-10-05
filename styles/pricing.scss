@@ -1,0 +1,888 @@
+// ============================================================================
+// Pricing page
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+.pricing-hero .frame-dash {
+  padding-block: 3.5rem 3rem;
+}
+
+.pricing-hero-inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 2rem 3rem;
+}
+
+.pricing-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.75rem;
+
+  h1 {
+    max-width: 34rem;
+  }
+}
+
+.pricing-hero-text {
+  max-width: 30rem;
+  color: var(--ink-muted);
+}
+
+.btn:hover .btn-arrow-down {
+  transform: translateY(2px);
+}
+
+// headline numbers laid out like a spec sheet
+.pricing-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: 34rem;
+  margin-top: 0.5rem;
+  background: dashes(to right) left top / 100% var(--hair) no-repeat;
+}
+
+.pricing-stat {
+  position: relative;
+  padding: 1.125rem 1.25rem 0 0;
+
+  & + & {
+    padding-left: 1.25rem;
+    background: dashes(to bottom) left top / var(--hair) 100% no-repeat;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 6px;
+    height: 6px;
+    background: var(--node);
+  }
+
+  dt {
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  dd {
+    margin-top: 0.5rem;
+    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.625rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.pricing-hero-art {
+  position: relative;
+}
+
+.pricing-art {
+  display: block;
+  width: 100%;
+  max-width: 35rem;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+@media (min-width: 992px) {
+  .pricing-hero .frame-dash {
+    padding-block: 4.5rem 4rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .pricing-hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-hero-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .pricing-stats {
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .pricing-hero-art {
+    width: 100%;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+}
+
+// very small screens: stats become a key/value list
+@media (max-width: 419px) {
+  .pricing-stats {
+    grid-template-columns: 1fr;
+    background: none;
+  }
+
+  .pricing-stat,
+  .pricing-stat + .pricing-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.875rem 0;
+    background: dashes(to right) left top / 100% var(--hair) no-repeat;
+
+    dd {
+      margin-top: 0;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero illustration
+// ---------------------------------------------------------------------------
+.pricing-art {
+  .pa-paper {
+    fill: var(--paper);
+  }
+
+  .pa-stroke {
+    stroke: var(--ink);
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+
+  .pa-soft-stroke {
+    stroke: color-mix(in srgb, var(--ink) 22%, transparent);
+    stroke-width: 1;
+  }
+
+  .pa-top {
+    fill: var(--brand-mist);
+  }
+
+  .pa-top-main {
+    fill: var(--brand-soft);
+  }
+
+  .pa-rule {
+    stroke: color-mix(in srgb, var(--ink) 25%, transparent);
+  }
+
+  .pa-ink {
+    fill: color-mix(in srgb, var(--ink) 70%, transparent);
+  }
+
+  .pa-soft {
+    fill: color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  .pa-dollar {
+    fill: var(--ink);
+    font-size: 26px;
+    font-weight: 600;
+  }
+
+  .pa-digits {
+    fill: var(--ink);
+  }
+
+  .pa-bullet,
+  .pa-node {
+    fill: var(--brand);
+  }
+
+  .pa-btn {
+    fill: var(--brand-soft);
+  }
+
+  .pa-btn-main {
+    fill: var(--brand);
+  }
+
+  .pa-arrow,
+  .pa-arrow-main {
+    stroke: var(--brand-deep);
+    stroke-width: 1.4;
+  }
+
+  .pa-arrow-main {
+    stroke: var(--paper);
+  }
+
+  .pa-chip {
+    fill: var(--brand);
+  }
+
+  .pa-chip-lock {
+    fill: none;
+    stroke: var(--paper);
+    stroke-width: 1.3;
+  }
+
+  .pa-ground {
+    fill: var(--brand-mist);
+  }
+
+  .pa-orbit-line {
+    stroke: color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+
+  .pa-orbit-dash {
+    stroke: color-mix(in srgb, var(--ink) 30%, transparent);
+    stroke-dasharray: 3 7;
+  }
+
+  .pa-dot {
+    fill: var(--ink);
+  }
+
+  .pa-marks {
+    stroke: color-mix(in srgb, var(--ink) 35%, transparent);
+
+    rect {
+      fill: #d9d2ea;
+      stroke: none;
+    }
+  }
+
+  .pa-chip-text {
+    fill: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .pa-check {
+    stroke: var(--brand);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pa-pointer {
+    fill: var(--coral);
+    stroke: var(--ink);
+    stroke-width: 1.1;
+    stroke-linejoin: round;
+  }
+
+  .pa-ripple {
+    stroke: var(--brand);
+    stroke-width: 1.5;
+    opacity: 0;
+  }
+
+  // resting state (also the reduced-motion state)
+  .pa-card {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: translate(0, 0) rotate(var(--r)) scale(1);
+  }
+
+  .pa-cursor {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    transform: translate(286px, 326px) scale(1);
+  }
+}
+
+@keyframes pa-fan {
+  from {
+    opacity: 0;
+    transform: translate(var(--sx), var(--sy)) rotate(0deg) scale(0.92);
+  }
+}
+
+@keyframes pa-cursor {
+  0% {
+    opacity: 0;
+    transform: translate(440px, 440px) scale(1);
+  }
+  10% {
+    opacity: 1;
+  }
+  34% {
+    transform: translate(286px, 326px) scale(1);
+  }
+  38% {
+    transform: translate(286px, 326px) scale(0.84);
+  }
+  42% {
+    transform: translate(286px, 326px) scale(1);
+  }
+  68% {
+    opacity: 1;
+    transform: translate(286px, 326px) scale(1);
+  }
+  84%,
+  100% {
+    opacity: 0;
+    transform: translate(470px, 250px) scale(1);
+  }
+}
+
+@keyframes pa-ripple {
+  0%,
+  37% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  39% {
+    opacity: 0.9;
+    transform: scale(0.6);
+  }
+  58%,
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+@keyframes pa-press {
+  0%,
+  36% {
+    fill: var(--brand);
+  }
+  39% {
+    fill: var(--brand-deep);
+  }
+  50%,
+  100% {
+    fill: var(--brand);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pricing-art {
+    .pa-in {
+      animation: art-in 1s var(--ease-out) both;
+      animation-delay: calc(var(--d, 0) * 1s + 0.2s);
+    }
+
+    .pa-card {
+      animation: pa-fan 1.3s cubic-bezier(0.2, 0.9, 0.25, 1.06) both;
+      animation-delay: calc(var(--d, 0) * 1s + 0.3s);
+    }
+
+    .pa-float {
+      animation: float 5s ease-in-out infinite alternate;
+      animation-delay: var(--f, 0s);
+    }
+
+    .pa-orbit {
+      transform-box: view-box;
+      transform-origin: 280px 250px;
+      animation: spin 80s linear infinite;
+    }
+
+    .pa-cursor {
+      animation: pa-cursor 7s ease-in-out 2.2s infinite both;
+    }
+
+    .pa-ripple {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: pa-ripple 7s linear 2.2s infinite both;
+    }
+
+    .pa-btn-main {
+      animation: pa-press 7s linear 2.2s infinite both;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Plans
+// ---------------------------------------------------------------------------
+.plans-section {
+  scroll-margin-top: var(--header-h);
+}
+
+.plans-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.plans-title {
+  margin-top: 1rem;
+}
+
+// segmented control with a sliding thumb (table layout needs ≥1200px)
+.view-toggle {
+  position: relative;
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border: var(--hair) solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+
+  button {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.125rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    transition: color 0.4s;
+
+    &[aria-pressed="true"] {
+      color: var(--brand-deep);
+    }
+
+    &:hover {
+      color: var(--ink);
+    }
+  }
+}
+
+.view-toggle-thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 4px;
+  background: var(--brand-soft);
+  transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1);
+
+  &[data-view="cards"] {
+    transform: translateX(100%);
+  }
+}
+
+// card layout: the default below 1200px and the "Cards" view above
+.plans {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.plans-head {
+  display: none;
+}
+
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.5rem;
+  background-color: var(--paper);
+  transition:
+    border-color 0.4s,
+    background-color 0.4s,
+    box-shadow 0.6s var(--ease-out);
+
+  // cursor spotlight
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(140, 87, 255, 0.12),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--brand) 40%, var(--line));
+    box-shadow: 0 34px 60px -46px rgba(77, 0, 151, 0.5);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  // the free trial spans the whole row
+  &.is-trial {
+    grid-column: 1 / -1;
+  }
+}
+
+.plan-cell {
+  position: relative;
+}
+
+.plan-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.plan-index {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.875rem;
+  height: 1.375rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--brand);
+  transition:
+    background-color 0.4s,
+    color 0.4s;
+}
+
+.plan:hover .plan-index {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--paper);
+}
+
+.plan-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.plan-badge {
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.25rem;
+  background: #ffe4e3;
+  color: #b3353d;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.plan-label {
+  display: block;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.plan-value {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+
+  &.is-muted {
+    color: var(--ink-muted);
+  }
+}
+
+.plan-price .plan-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem;
+  margin-top: 0.375rem;
+}
+
+.plan-amount {
+  font-size: clamp(2rem, 1.6rem + 1vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.plan-duration {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+// specs read as a key/value list separated by dashed rules
+.plan-spec,
+.plan-extra {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  background: dashes(to right) left top / 100% var(--hair) no-repeat;
+}
+
+.plan-extras {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  text-align: right;
+  color: var(--ink);
+}
+
+.plan-cta {
+  margin-top: auto;
+  padding-top: 0.5rem;
+
+  .btn {
+    width: 100%;
+  }
+}
+
+// horizontal trial card in the grid layouts (never in the table view)
+@mixin trial-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 1.25rem 2rem;
+
+  .plan-head {
+    grid-column: 1 / -1;
+  }
+
+  .plan-spec,
+  .plan-extra {
+    display: block;
+    padding-top: 0;
+    background: none;
+  }
+
+  .plan-extras {
+    text-align: left;
+  }
+
+  .plan-value {
+    margin-top: 0.375rem;
+  }
+
+  .plan-extra {
+    grid-column: span 2;
+  }
+
+  .plan-cta {
+    padding-top: 0;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .plan.is-trial {
+    @include trial-card;
+  }
+}
+
+@media (max-width: 639px) {
+  .plans {
+    grid-template-columns: 1fr;
+  }
+
+  .plan {
+    padding: 1.5rem;
+  }
+}
+
+// narrow phones: extra usage reads better stacked under its label
+@media (max-width: 419px) {
+  .plan-extra {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .plan-extras {
+    text-align: left;
+  }
+}
+
+@media (min-width: 1200px) {
+  .view-toggle {
+    display: grid;
+  }
+
+  .plans-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    .plan.is-trial {
+      @include trial-card;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(11rem, auto);
+
+      .plan-extra {
+        grid-column: auto;
+      }
+    }
+  }
+
+  // "Compare" view: one row per plan under a sticky header
+  .plans-table {
+    --plan-cols: minmax(0, 1.35fr) minmax(0, 1.15fr) minmax(0, 0.8fr) minmax(0, 0.9fr)
+      minmax(0, 1.25fr) minmax(10rem, auto);
+
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    .plans-head {
+      position: sticky;
+      top: var(--header-h);
+      z-index: 3;
+      display: grid;
+      grid-template-columns: var(--plan-cols);
+      gap: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: #f6f5f2;
+      background: color-mix(in srgb, #f6f5f2 94%, transparent);
+      backdrop-filter: blur(8px);
+      font-size: 0.6875rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: var(--hair);
+        background: dashes(to right);
+      }
+    }
+
+    .plan {
+      display: grid;
+      grid-template-columns: var(--plan-cols);
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      border-color: transparent;
+      border-radius: 0;
+      background: dashes(to right) left bottom / 100% var(--hair) no-repeat transparent;
+      box-shadow: none;
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--brand-mist) 70%, transparent);
+      }
+    }
+
+    // column labels live in the sticky header; keep them for screen readers
+    .plan-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .plan-price .plan-value {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      margin-top: 0;
+    }
+
+    .plan-amount {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .plan-spec,
+    .plan-extra {
+      display: block;
+      padding-top: 0;
+      background: none;
+    }
+
+    .plan-extras {
+      text-align: left;
+      font-size: 0.8125rem;
+      color: var(--ink-muted);
+    }
+
+    .plan-cta {
+      justify-self: end;
+      margin-top: 0;
+      padding-top: 0;
+
+      .btn {
+        width: auto;
+      }
+    }
+  }
+}
+
+// during the Flip morph between rows and cards
+.plans.is-morphing .plan {
+  border-color: var(--brand-soft);
+  background-color: color-mix(in srgb, var(--brand-mist) 85%, transparent);
+}
+
+.plans-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+// scanning line that sweeps over the plans as they appear
+.plans-scan {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: -1rem;
+  right: -1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brand-bright) 20%, var(--brand-bright) 80%, transparent);
+  box-shadow: 0 0 14px 2px rgba(140, 87, 255, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+// loading and message states
+.plan-skeleton {
+  pointer-events: none;
+
+  .skeleton {
+    display: block;
+    height: 0.875rem;
+    max-width: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #ebeae4 0%, #f7f6f2 45%, #ebeae4 90%) 0 0 / 200% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .plan-skeleton .skeleton {
+    animation: shimmer 1.4s linear infinite;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.plans-message {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  padding: 3rem 1.5rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--paper);
+  text-align: center;
+  color: var(--ink-muted);
+}

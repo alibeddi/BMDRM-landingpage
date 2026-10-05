@@ -8,7 +8,10 @@
     "build": "next build",
     "export": "next build && next export",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "film:score": "node scripts/film-score.mjs",
+    "film:preview": "node scripts/film-score.mjs && remotion studio",
+    "film:render": "node scripts/film-score.mjs && remotion render BMDRM-Film exports/BMDRM-Film.mp4"
   },
   "dependencies": {
     "disqus-react": "^1.1.5",
@@ -35,6 +38,14 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@fontsource/instrument-serif": "5.3.0",
+    "@fontsource/plus-jakarta-sans": "5.3.0",
+    "@remotion/bundler": "4.0.533",
+    "@remotion/cli": "4.0.533",
+    "@remotion/enable-scss": "4.0.533",
+    "@remotion/fonts": "4.0.533",
+    "@remotion/media": "4.0.533",
+    "@remotion/renderer": "4.0.533",
     "@tailwindcss/forms": "^0.5.8",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
@@ -46,6 +57,7 @@
     "postcss": "^8.4.42",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
+    "remotion": "4.0.533",
     "sass": "^1.77.8",
     "sharp": "^0.33.5",
     "tailwind-bootstrap-grid": "^5.1.0",

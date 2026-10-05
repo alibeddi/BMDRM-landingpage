@@ -42,11 +42,15 @@
 
   "call_to_action": {
     "enable": true,
-    "title": "Get Andromeda Now",
-    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi egestas </br> Werat viverra id et aliquet. vulputate egestas sollicitudin.",
+    "kicker": "Get started",
+    "title": "Get BMDRM *now*",
+    "content": "Our secure video hosting platform ensures your content is protected with advanced encryption and seamless streaming.",
     "button": {
-      "label": "Download The Theme",
-      "link": "https://themefisher.com/products/andromeda-light-nextjs"
+      "label": "Contact us now"
+    },
+    "secondary_button": {
+      "label": "View pricing",
+      "link": "/pricing"
     }
   },
 

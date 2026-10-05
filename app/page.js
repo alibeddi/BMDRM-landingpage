@@ -1,42 +1,33 @@
+import Clients from "@layouts/components/Clients";
 import Cta from "@layouts/components/Cta";
+import { Divider } from "@layouts/components/Frame";
 import GSAPWrapper from "@layouts/components/GSAPWrapper";
 import Features from "@layouts/partials/Features";
+import FeaturesInAction from "@layouts/partials/FeaturesInAction";
+import HomeHero from "@layouts/partials/HomeHero";
 import SeoMeta from "@layouts/partials/SeoMeta";
 import ShortIntro from "@layouts/partials/ShortIntro";
+import Statement from "@layouts/partials/Statement";
 import { getListPage } from "@lib/contentParser";
-import Clients from "../layouts/components/Clients";
-import FeaturesInAction from "@layouts/partials/FeaturesInAction";
+
 const Home = async () => {
   const homepage = await getListPage("content/_index.md");
   const { frontmatter } = homepage;
-  const { features, intro } = frontmatter;
-
-  // Example screenshots data (replace with your actual images and descriptions)
-  const featuresInActionItems = [
-    {
-      image: "/images/screenshots/feature1.png",
-      description: "Upload and manage your videos securely.",
-    },
-    {
-      image: "/images/screenshots/feature2.png",
-      description: "Advanced analytics dashboard for your content.",
-    },
-    {
-      image: "/images/screenshots/feature3.png",
-      description: "Seamless video playback with DRM protection.",
-    },
-  ];
+  const { hero, intro, statement, features_in_action, clients, features } =
+    frontmatter;
 
   return (
     <GSAPWrapper>
       <SeoMeta title="Home" />
+      <HomeHero hero={hero} />
+      <Divider />
       <ShortIntro intro={intro} />
-      <FeaturesInAction items={featuresInActionItems} />
-      <div className="w-full overflow-hidden md:w-auto md:overflow-visible">
-        <Clients />
-        <Features features={features} />
-        <Cta />
-      </div>
+      <Divider flip />
+      <Statement statement={statement} />
+      <FeaturesInAction data={features_in_action} />
+      <Clients clients={clients} />
+      <Features features={features} />
+      <Cta />
     </GSAPWrapper>
   );
 };

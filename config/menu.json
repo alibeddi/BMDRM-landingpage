@@ -15,12 +15,27 @@
   ],
   "footer": [
     {
-      "name": "About",
-      "url": "/about"
+      "title": "Product",
+      "links": [
+        {
+          "name": "Pricing",
+          "url": "/pricing"
+        },
+        {
+          "name": "Watch the demo",
+          "url": "/demo"
+        }
+      ]
     },
     {
-      "name": "Pricing",
-      "url": "/pricing"
+      "title": "Company",
+      "links": [
+        {
+          "name": "About",
+          "url": "/about"
+        }
+      ],
+      "chat": true
     }
   ],
   "legal": [

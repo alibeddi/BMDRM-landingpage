@@ -1,161 +1,80 @@
-"use client";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper";
+import CursorDemo from "@layouts/components/CursorDemo";
+import { Divider, Frame } from "@layouts/components/Frame";
+import { ArrowIcon } from "@layouts/components/Icons";
 import { markdownify } from "@lib/utils/textConverter";
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import Image from "next/image";
+import Link from "next/link";
+import { Fragment } from "react";
 
-const features = [
-  {
-    name: "Home Dashboard",
-    icon: "/images/icons/dashboard.svg",
-    description: "Monitor your video library and viewer activity.",
-    image: "/images/screenshots/dashboard.png",
-  },
-  {
-    name: "Analytics Bandwidths",
-    icon: "/images/icons/bandwidths.svg",
-    description: "Analyze your video's bandwidth usage.",
-    image: "/images/screenshots/bandwidths.png",
-  },
-  {
-    name: "Videos Dashboard",
-    icon: "/images/icons/videos.svg",
-    description: "Manage your videos and their stats.",
-    image: "/images/screenshots/videos.png",
-  },
-];
-
-const FeaturesInAction = () => {
-  const [selected, setSelected] = useState(0);
-  const [swiperInitialized, setSwiperInitialized] = useState(false);
-  const swiperRef = useRef(null);
-  const intervalRef = useRef(null);
-  const paginationRef = useRef(null);
-  
-  // Auto-slide functionality
-  useEffect(() => {
-    if (!swiperInitialized) return;
-    
-    intervalRef.current = setInterval(() => {
-      if (swiperRef.current && swiperRef.current.swiper) {
-        swiperRef.current.swiper.slideNext();
-      }
-    }, 5000);
-    
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [swiperInitialized]);
-
-  const handleSlideChange = (swiper) => {
-    setSelected(swiper.activeIndex);
-  };
-  
-  const handleSwiperInit = () => {
-    setSwiperInitialized(true);
-  };
-
+// Dashboard screenshots presented as alternating text/image blocks, each
+// walked through by an animated cursor (CursorDemo).
+const FeaturesInAction = ({ data }) => {
   return (
-    <section className="section pt-0">
-      <div className="container-xl">
-        <div className="relative px-4 py-[70px] bg-transparent1 rounded-md">
-          <div className="flex flex-col items-center">
-            
-            {/* Title replacing buttons */}
-            <div className="w-full mb-10 text-center">
-              {/* <h2 className="mb-4">Features in Action</h2> */}
-              {markdownify("Features in Action", "h2", "mb-4 section-title")}
-              <p className="mt-10 mx-auto">Explore our platform's powerful features through these interactive examples</p>
-            </div>
-        
-            {/* Feature screenshot with Swiper */}
-            <div className="w-full mb-8 overflow-hidden">
-              <div className="swiper-container-wrapper">
-                <Swiper
-                  ref={swiperRef}
-                  modules={[Navigation, Pagination]}
-                  effect="slide"
-                  speed={800}
-                  slidesPerView={1}
-                  spaceBetween={20}
-                  loop={true}
-                  initialSlide={selected}
-                  onSlideChange={handleSlideChange}
-                  onInit={handleSwiperInit}
-                  pagination={{
-                    el: paginationRef.current,
-                    type: "bullets",
-                    clickable: true,
-                    dynamicBullets: true,
-                  }}
-                  onBeforeInit={(swiper) => {
-                    swiper.params.pagination.el = paginationRef.current;
-                  }}
-                  className="rounded-2xl overflow-hidden bg-transparent relative mx-auto max-w-5xl"
-                >
-                  {features.map((feature, idx) => (
-                    <SwiperSlide key={feature.name} className="px-4 overflow-hidden">
-                      <div className="bg-gray-100/70 rounded-2xl overflow-hidden">
-                        {/* Image */}
-                        <div className="w-full">
-                          <Image
-                            src={feature.image}
-                            alt={feature.name}
-                            width={900}
-                            height={480}
-                            className="object-cover w-full rounded-t-2xl"
-                            priority={idx === selected}
-                          />
-                        </div>
-                        
-                        {/* Description with smaller font */}
-                        <div className="p-6 text-center">
-                          <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.name}</h3>
-                          <p className="text-gray-700 text-sm leading-relaxed">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-                
-                {/* Pagination dots */}
-                <div className="mt-16 flex justify-center pl-12">
-                  <div className="pagination pl-8" ref={paginationRef}></div>
+    <>
+      <Divider />
+      <Frame innerClassName="pt-16 md:pt-24 pb-4 md:pb-8">
+        <div className="mx-auto max-w-[40rem] text-center" data-reveal-stagger>
+          <p className="kicker">{data.kicker}</p>
+          {markdownify(data.title, "h2", "mt-5")}
+          {markdownify(
+            data.description,
+            "p",
+            "mx-auto mt-5 max-w-[28rem] text-ink/60",
+          )}
+        </div>
+      </Frame>
+
+      {data.list.map((item, index) => (
+        <Fragment key={item.name}>
+          <Divider flip={index % 2 === 0} />
+          <Frame innerClassName="py-14 md:py-20">
+            <div className={`platform ${index % 2 ? "platform-reverse" : ""}`}>
+              <div className="platform-content" data-reveal-stagger>
+                <p className="kicker">
+                  <span className="platform-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  {item.name}
+                </p>
+                <h2 className="platform-title">{item.title}</h2>
+                <p className="max-w-[22rem] text-ink/60">{item.description}</p>
+              </div>
+              <div className="platform-media" data-reveal="clip">
+                <div className="media-frame" data-parallax="-0.08">
+                  <div className="media-frame-inner">
+                    <Image
+                      src={item.image}
+                      alt={`${item.name} screenshot`}
+                      width={1504}
+                      height={857}
+                      sizes="(min-width: 992px) 38rem, 100vw"
+                      className="platform-image"
+                    />
+                    <CursorDemo image={item.image} />
+                  </div>
                 </div>
               </div>
             </div>
+          </Frame>
+        </Fragment>
+      ))}
+
+      {/* call to action sitting on a dashed band */}
+      <Divider />
+      <div className="band dash-btm">
+        <div className="frame">
+          <div className="frame-solid">
+            <div className="frame-dash flex justify-center">
+              <Link href={data.button.link} className="btn btn-primary">
+                {data.button.label}
+                <ArrowIcon className="btn-arrow" />
+              </Link>
+            </div>
           </div>
-          
-          {/* Background decorative elements */}
-          <div className="absolute -z-10 top-10 right-10 w-40 h-40 bg-indigo-100 rounded-full opacity-20 blur-3xl"></div>
-          <div className="absolute -z-10 bottom-10 left-10 w-60 h-60 bg-purple-100 rounded-full opacity-20 blur-3xl"></div>
         </div>
       </div>
-      <style jsx global>{`
-        .swiper-container-wrapper {
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          border-radius: 1rem;
-        }
-        .swiper-slide {
-          box-sizing: border-box;
-          overflow: hidden;
-        }
-        .swiper-wrapper {
-          will-change: transform;
-        }
-      `}</style>
-    </section>
+      <Frame as="div" innerClassName="h-16 md:h-24" aria-hidden="true" />
+    </>
   );
 };
 

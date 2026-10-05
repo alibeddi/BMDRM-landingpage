@@ -8,19 +8,15 @@ let h4 = h5 * font_scale;
 let h3 = h4 * font_scale;
 let h2 = h3 * font_scale;
 let h1 = h2 * font_scale;
-let fontPrimary, fontPrimaryType, fontSecondary, fontSecondaryType;
-if (theme.fonts.font_family.primary) {
-  fontPrimary = theme.fonts.font_family.primary
-    .replace(/\+/g, " ")
-    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
-  fontPrimaryType = theme.fonts.font_family.primary_type;
-}
-if (theme.fonts.font_family.secondary) {
-  fontSecondary = theme.fonts.font_family.secondary
-    .replace(/\+/g, " ")
-    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
-  fontSecondaryType = theme.fonts.font_family.secondary_type;
-}
+
+// Fonts are self-hosted with next/font (see app/layout.js), which exposes them
+// as CSS variables. The names from theme.json are the var() fallbacks, so the
+// stack stays valid even if a variable is missing.
+const { font_family } = theme.fonts;
+const fontStack = (variable, name, type) => [
+  `var(${variable}, "${name}")`,
+  type,
+];
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -46,12 +42,13 @@ module.exports = {
         text: theme.colors.default.text_color.default,
         light: theme.colors.default.text_color.light,
         dark: theme.colors.default.text_color.dark,
-        primary: "#9e72ff" || theme.colors.default.theme_color.primary,
+        primary: theme.colors.default.theme_color.primary,
         body: theme.colors.default.theme_color.body,
         border: theme.colors.default.theme_color.border,
         "border-secondary": theme.colors.default.theme_color.border_secondary,
         "theme-light": theme.colors.default.theme_color.theme_light,
         "theme-dark": theme.colors.default.theme_color.theme_dark,
+        ...theme.colors.palette,
       },
       fontSize: {
         base: font_base + "px",
@@ -66,8 +63,21 @@ module.exports = {
         h6: h6 + "rem",
       },
       fontFamily: {
-        primary: [fontPrimary, fontPrimaryType],
-        secondary: [fontSecondary, fontSecondaryType],
+        sans: fontStack(
+          "--font-primary",
+          font_family.primary,
+          font_family.primary_type,
+        ),
+        primary: fontStack(
+          "--font-primary",
+          font_family.primary,
+          font_family.primary_type,
+        ),
+        secondary: fontStack(
+          "--font-secondary",
+          font_family.secondary,
+          font_family.secondary_type,
+        ),
       },
     },
   },

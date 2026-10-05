@@ -1,13 +1,10 @@
-// import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import VideoFrame from "./VideoFrame";
 
-function VideoPopupServer({ id, thumbnail, width = 700, height = 394 }) {
-  //animate
+// 16:9 box for the player; no clipping or effects (see ShortIntroServer)
+function VideoPopupServer() {
   return (
-    <div className="relative flex overflow-hidden">
-      <div className="aspect-video w-full h-full">
-        <VideoFrame />
-      </div>
+    <div className="aspect-video w-full">
+      <VideoFrame />
     </div>
   );
 }

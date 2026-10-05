@@ -1,0 +1,1203 @@
+// ============================================================================
+// Home page sections
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+// fills the first screen, but never grows much past its content + art on
+// tall portrait screens (tablets)
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: min(
+    calc(100svh - var(--header-offset) - var(--header-h)),
+    calc(26rem + 28vw)
+  );
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 38rem;
+  margin: 0 auto 1rem;
+  padding: clamp(3rem, 7vh, 5rem) 1.25rem 0;
+  text-align: center;
+}
+
+.hero-text {
+  max-width: 32rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+// the illustration takes the space left at the bottom of the viewport
+.hero-art-wrap {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  pointer-events: none;
+}
+
+// the fortress fills the middle; its sky, mountains and ground run on past
+// the frame (overflow visible) so wide screens see one landscape
+.hero-art {
+  position: relative;
+  left: 50%;
+  display: block;
+  width: min(100%, 840px);
+  height: auto;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+
+// phones: the whole fortress, both tower crews and a strip of landscape
+// either side; tablets and up see it all
+@media (max-width: 639px) {
+  .hero-art {
+    width: 116vw;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Hero illustration: the fortress (layouts/components/HeroArt.js)
+// ---------------------------------------------------------------------------
+.hero-art {
+  .art-paper {
+    fill: var(--paper);
+  }
+
+  .art-soft-stroke {
+    stroke: color-mix(in srgb, var(--ink) 22%, transparent);
+    stroke-width: 1;
+  }
+
+  .hero-file-fold {
+    fill: #dcd4ee;
+  }
+
+  .art-glow {
+    fill: var(--brand-soft);
+    opacity: 0.55;
+  }
+
+  .art-play-ink {
+    fill: var(--brand);
+  }
+
+  .art-file-text {
+    fill: var(--ink);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .hero-frieze {
+    fill: none;
+    stroke: #b7a2f2;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .hero-thread {
+    fill: none;
+    stroke: var(--brand);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 4;
+  }
+}
+
+@keyframes art-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes art-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes wave {
+  50% {
+    transform: scaleY(0.5);
+  }
+}
+
+@keyframes ring {
+  from {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+// the mouse only ever appears in motion
+.hero-mouse {
+  opacity: 0;
+}
+
+// ---------------------------------------------------------------------------
+// The hero story, one 14s cycle shared by every beat:
+//   0-44%   the video file hovers over the gate, then drops into the lock
+//   44-56%  the dial turns, the lock folds, the glow swells
+// The ballista, the gate guard, the knight and the archer react on the same
+// clock.
+// ---------------------------------------------------------------------------
+$story: 14s;
+
+@keyframes hero-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  6%,
+  36% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  44%,
+  100% {
+    opacity: 0;
+    transform: translateY(58px) scale(0.45);
+  }
+}
+
+// the mouse: hidden most of the time, then a dash to the gate, a sniff,
+// and a dash off behind the firs
+@keyframes hero-mouse {
+  0%,
+  52% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  54% {
+    opacity: 1;
+    transform: translateX(12px);
+  }
+  64%,
+  72% {
+    transform: translateX(210px);
+  }
+  86% {
+    opacity: 1;
+  }
+  88%,
+  100% {
+    opacity: 0;
+    transform: translateX(590px);
+  }
+}
+
+@keyframes o-scurry {
+  to {
+    transform: translateY(-1.6px);
+  }
+}
+
+@keyframes hero-ring {
+  0%,
+  44% {
+    transform: rotate(0deg);
+  }
+  56%,
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes hero-lock {
+  0%,
+  48%,
+  56%,
+  100% {
+    transform: scaleX(1);
+  }
+  52% {
+    transform: scaleX(0.12);
+  }
+}
+
+@keyframes hero-glow {
+  0%,
+  42%,
+  70%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  52% {
+    opacity: 0.95;
+    transform: scale(1.14);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-art {
+    .art-in {
+      animation: art-in 1.1s var(--ease-out) both;
+      animation-delay: calc(var(--d, 0) * 1s + 0.3s);
+    }
+
+    .art-pop {
+      animation-name: art-pop;
+      transform-box: view-box;
+      transform-origin: 720px 386px;
+    }
+
+    .hero-drop {
+      transform-box: fill-box;
+      transform-origin: 50% 50%;
+      animation: hero-drop $story ease-in-out infinite;
+    }
+
+    .hero-mouse {
+      animation: hero-mouse 22s ease-in-out 3s infinite both;
+    }
+
+    .o-scurry {
+      animation: o-scurry 0.2s ease-in-out infinite alternate;
+    }
+
+    .hero-ring,
+    .hero-glow {
+      transform-box: view-box;
+      transform-origin: 720px 386px;
+    }
+
+    .hero-ring {
+      animation: hero-ring $story cubic-bezier(0.6, 0, 0.3, 1) infinite;
+    }
+
+    .hero-glow {
+      animation: hero-glow $story ease-in-out infinite;
+    }
+
+    .hero-lock {
+      transform-box: fill-box;
+      transform-origin: 50% 50%;
+      animation: hero-lock $story ease-in-out infinite;
+    }
+
+    // the ballista tracks the arriving file, the gate guard raises his
+    // pavise, the knight glances at the gate, the archer draws
+    .o-aim {
+      animation-duration: $story;
+    }
+
+    .o-raise {
+      animation-duration: $story;
+      animation-delay: -2.3s;
+    }
+
+    .o-knight .o-look {
+      animation-duration: $story;
+    }
+
+    .o-draw,
+    .o-string-top,
+    .o-string-bot {
+      animation-duration: $story;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Intro video card
+// ---------------------------------------------------------------------------
+.video-card {
+  display: block;
+  padding: 0.5rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.625rem;
+  background: var(--paper);
+  transition:
+    border-color 0.5s,
+    box-shadow 0.6s var(--ease-out);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--brand) 45%, var(--line));
+    box-shadow: 0 40px 70px -48px rgba(77, 0, 151, 0.45);
+  }
+}
+
+.video-card-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0.375rem 0.625rem;
+
+  .kicker {
+    font-size: 0.6875rem;
+  }
+}
+
+.video-card-dots {
+  display: flex;
+  gap: 5px;
+
+  i {
+    width: 7px;
+    height: 7px;
+    border: var(--hair) solid var(--line);
+    background: var(--cream);
+  }
+}
+
+.video-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.25rem;
+  background: var(--brand-mist);
+  color: var(--brand-deep);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.video-card-media {
+  position: relative;
+  aspect-ratio: 1077 / 604;
+  overflow: hidden;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.375rem;
+  background: #e9e7f0;
+}
+
+.video-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  // hides the rounded corners baked into the cover image
+  transform: scale(1.05);
+  transition: transform 1.2s var(--ease-out);
+}
+
+.video-card:hover .video-card-image {
+  transform: scale(1.09);
+}
+
+// an origami poster in place of a cover image
+.video-card-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.2s var(--ease-out);
+}
+
+.video-card:hover .video-card-art {
+  transform: scale(1.03);
+}
+
+.video-card-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  transform: translate(-50%, -50%);
+  transition:
+    background-color 0.5s,
+    color 0.5s,
+    transform 0.6s var(--ease-out);
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--brand-soft);
+    border-radius: inherit;
+    opacity: 0;
+  }
+}
+
+.video-card:hover .video-card-play {
+  background: var(--brand-deep);
+  color: var(--cream);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .video-card-play::before,
+  .video-card-play::after {
+    animation: ring 2.4s var(--ease-out) infinite;
+  }
+
+  .video-card-play::after {
+    animation-delay: 1.2s;
+  }
+}
+
+@media (max-width: 767px) {
+  .video-card-play {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .video-card-bar .kicker {
+    display: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Secure player (demo page)
+// ---------------------------------------------------------------------------
+// DRM video reaches the screen through a protected hardware overlay that
+// screen recording and screen sharing can't read. A transform, opacity,
+// filter, mask, blend mode, animation or rounded clip on the player or on any
+// ancestor sends it back through the page compositor, where it can be
+// captured. The frame below paints only borders and backgrounds, and the
+// guard rules keep every effect off the player subtree.
+.secure-player {
+  padding: 0.5rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.625rem;
+  background: var(--paper);
+}
+
+// square, unclipped: the player draws its own corners
+.secure-player-media {
+  border: var(--hair) solid var(--line);
+  background: var(--night);
+}
+
+.secure-player,
+.secure-player * {
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  clip-path: none !important;
+  mask: none !important;
+  mix-blend-mode: normal !important;
+  backdrop-filter: none !important;
+  will-change: auto !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+.secure-player-media,
+.secure-player-media div {
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+
+// nothing may blur the player from above: the header turns solid instead
+body:has(.secure-player) .header {
+  &.is-scrolled,
+  &.is-open {
+    background-color: #f6f5f2;
+    backdrop-filter: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Statement
+// ---------------------------------------------------------------------------
+.statement {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 3rem 4rem;
+}
+
+.statement-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.statement-text {
+  max-width: 38rem;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.statement-muted {
+  color: color-mix(in srgb, var(--ink) 58%, transparent);
+}
+
+.statement-media {
+  justify-self: center;
+  width: 100%;
+  max-width: 30rem;
+}
+
+// caption sits on a dashed baseline, like a figure on a technical drawing
+.statement-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.875rem 0.25rem 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  background: dashes(to right) left top / 100% var(--hair) no-repeat;
+}
+
+// stack before the knight gets cramped next to the text
+@media (max-width: 991px) {
+  .statement {
+    grid-template-columns: 1fr;
+  }
+
+  .statement-content {
+    align-items: center;
+    text-align: center;
+    max-width: 38rem;
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .statement-text {
+    font-size: clamp(1.25rem, 1rem + 1.6vw, 1.5rem);
+  }
+
+  .statement-media {
+    max-width: 22rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Features in action (alternating blocks)
+// ---------------------------------------------------------------------------
+.platform {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+.platform-reverse {
+  grid-template-columns: 1.15fr 0.85fr;
+
+  .platform-content {
+    order: 2;
+  }
+}
+
+.platform-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.875rem;
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.platform-index {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.875rem;
+  height: 1.375rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+.platform-title {
+  font-size: clamp(1.75rem, 1.4rem + 0.8vw, 2.125rem);
+  line-height: 1.2;
+}
+
+.platform-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 991px) {
+  .platform,
+  .platform-reverse {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+
+    .platform-content {
+      order: 0;
+    }
+  }
+}
+
+// a cursor walking through each screenshot (layouts/components/CursorDemo.js)
+.cursor-demo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cd-track {
+  position: absolute;
+  inset: 0;
+}
+
+.cd-pointer {
+  display: block;
+  width: clamp(14px, 2.2%, 22px);
+  height: auto;
+  filter: drop-shadow(0 2px 3px rgba(22, 17, 43, 0.35));
+  transform-origin: 10% 10%;
+}
+
+// hover: a violet outline around what the cursor points at
+.cd-ring {
+  position: absolute;
+  border: 2px solid var(--brand-bright);
+  border-radius: 6px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-bright) 22%, transparent);
+  opacity: 0;
+}
+
+// click: a ripple from the pointer tip
+.cd-click {
+  position: absolute;
+  width: clamp(18px, 3.2%, 34px);
+  aspect-ratio: 1;
+  border: 2px solid var(--brand-bright);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+// tooltip anchored at the pointer, opening up and to the side
+.cd-tip {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.cd-tip-bubble {
+  position: absolute;
+  bottom: 10px;
+  left: 16px;
+  padding: 0.35em 0.7em;
+  border-radius: 6px;
+  background: var(--paper);
+  box-shadow: 0 8px 20px -8px rgba(22, 17, 43, 0.45);
+  color: var(--ink);
+  font-size: clamp(9px, 1.5vw, 12px);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cd-tip.is-left .cd-tip-bubble {
+  right: 12px;
+  left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-demo {
+    display: none;
+  }
+}
+
+// button resting on a dashed band
+.band .frame-dash {
+  padding-block: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Clients (layouts/components/Clients.js)
+// ---------------------------------------------------------------------------
+.clients {
+  padding: 5rem var(--gutter);
+}
+
+.clients-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 60rem;
+  margin-inline: auto;
+  padding: 2.5rem;
+  border: var(--hair) solid var(--line);
+  border-radius: 0.5rem;
+  background: #f6f5f2;
+}
+
+.clients-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+}
+
+.clients-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  max-width: 30rem;
+}
+
+// logos in a row of cells ruled like the rest of the page
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background:
+    dashes(to right) left top / 100% var(--hair) no-repeat,
+    dashes(to right) left bottom / 100% var(--hair) no-repeat;
+}
+
+.clients-cell {
+  display: grid;
+  place-items: center;
+  min-height: 8rem;
+  padding: 1.5rem 1rem;
+
+  & + & {
+    background: dashes(to bottom) left top / var(--hair) 100% no-repeat;
+  }
+}
+
+.clients-logo {
+  width: auto;
+  max-width: 100%;
+  height: 2.5rem;
+  object-fit: contain;
+  transition: transform 0.6s var(--ease-out);
+
+  // squarish marks read smaller than wordmarks at the same height
+  &.is-square {
+    height: 4.25rem;
+  }
+}
+
+.clients-cell:hover .clients-logo {
+  transform: scale(1.06);
+}
+
+@media (max-width: 767px) {
+  .clients {
+    padding-block: 3rem;
+  }
+
+  .clients-card {
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .clients-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clients-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .clients-cell {
+    min-height: 6.5rem;
+    padding: 1.25rem 0.75rem;
+
+    & + & {
+      background: none;
+    }
+
+    &:nth-child(even) {
+      background: dashes(to bottom) left top / var(--hair) 100% no-repeat;
+    }
+
+    &:nth-child(n + 3) {
+      background: dashes(to right) left top / 100% var(--hair) no-repeat;
+    }
+
+    &:nth-child(4) {
+      background:
+        dashes(to bottom) left top / var(--hair) 100% no-repeat,
+        dashes(to right) left top / 100% var(--hair) no-repeat;
+    }
+  }
+
+  .clients-logo {
+    height: 2.125rem;
+
+    &.is-square {
+      height: 3.5rem;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Key features (dark)
+// ---------------------------------------------------------------------------
+.features-dark {
+  --kicker: var(--coral);
+  position: relative;
+  overflow: hidden;
+  background: var(--night);
+  color: #ece8f5;
+}
+
+// blueprint orbits behind the night sky
+.features-arcs {
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 380px;
+  opacity: 0.55;
+  pointer-events: none;
+
+  .arc-line {
+    stroke: rgba(236, 232, 245, 0.16);
+    stroke-width: 1;
+  }
+
+  .arc-thick {
+    stroke: #2a2150;
+    stroke-width: 16;
+  }
+
+  .arc-dash {
+    stroke: rgba(236, 232, 245, 0.22);
+    stroke-width: 1;
+    stroke-dasharray: 3 9;
+  }
+
+  .arc-node {
+    fill: rgba(236, 232, 245, 0.5);
+  }
+
+  .arc-spin {
+    transform-box: view-box;
+    transform-origin: 1310px -30px;
+  }
+}
+
+// the night fortress opens the section; its foreground melts into the
+// section background, so the heading sits on its ground
+.fortress-scene {
+  --front-l: var(--night);
+  --front-d: var(--night);
+  position: relative;
+  width: 100%;
+  height: clamp(230px, 32vw, 600px);
+}
+
+// a violet glow behind the lock gate
+.fortress-glow {
+  fill: #8c57ff;
+  opacity: 0.22;
+}
+
+@keyframes fortress-glow {
+  to {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fortress-glow {
+    animation: fortress-glow 4s ease-in-out infinite alternate;
+  }
+}
+
+// phones: taller, so the crop closes in on the fortress and its guards
+@media (max-width: 639px) {
+  .fortress-scene {
+    height: 300px;
+  }
+}
+
+.features-dark-inner {
+  position: relative;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1.5rem var(--gutter) 3rem;
+}
+
+.features-dark-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 48rem;
+  margin-bottom: 3.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px dashed rgba(238, 234, 246, 0.4);
+}
+
+.features-dark-title {
+  font-weight: 400;
+  color: #f4f1fb;
+}
+
+.features-dark-lead {
+  max-width: 32rem;
+  color: rgba(236, 232, 245, 0.7);
+}
+
+.features-dark-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3.5rem 4rem;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.feature-item-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(236, 232, 245, 0.25);
+  border-radius: 0.25rem;
+  color: var(--brand-soft);
+  transition:
+    background-color 0.5s,
+    color 0.5s,
+    border-color 0.5s;
+}
+
+.feature-item:hover .feature-item-icon {
+  border-color: var(--brand-soft);
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+.feature-item-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f4f1fb;
+}
+
+.feature-item-text {
+  font-size: 0.9375rem;
+  color: rgba(236, 232, 245, 0.72);
+}
+
+.features-timeline {
+  position: relative;
+  left: 50%;
+  display: block;
+  width: 100%;
+  min-width: 760px;
+  height: auto;
+  margin-top: 1rem;
+  transform: translateX(-50%);
+}
+
+// phones get their own composition of the timeline
+.features-timeline-m {
+  display: none;
+  width: 100%;
+  height: auto;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 767px) {
+  .features-timeline {
+    display: none;
+  }
+
+  .features-timeline-m {
+    display: block;
+  }
+}
+
+.timeline-art {
+  .timeline-hill {
+    fill: var(--night-soft);
+  }
+
+  .timeline-hill-front {
+    fill: #241b44;
+  }
+
+  .timeline-wave {
+    stroke: rgba(182, 156, 255, 0.3);
+    stroke-width: 3;
+    stroke-linecap: round;
+
+    &.is-played {
+      stroke: #a47bff;
+    }
+  }
+
+  .timeline-rule {
+    stroke: rgba(236, 232, 245, 0.28);
+    stroke-width: 1;
+  }
+
+  .timeline-label {
+    fill: rgba(236, 232, 245, 0.45);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .timeline-playhead {
+    line {
+      stroke: var(--coral);
+      stroke-width: 1.2;
+    }
+
+    rect {
+      fill: var(--coral);
+    }
+  }
+}
+
+// knight standing on the timeline's right-hand hill; the hill line sits at
+// 6% of the art's width (max(100vw, 760px)) above the section bottom
+.features-sentinel {
+  position: absolute;
+  z-index: 1;
+  right: max(2rem, 5vw);
+  bottom: calc(max(100vw, 760px) * 0.058);
+  display: none;
+  width: clamp(110px, 10vw, 150px);
+  pointer-events: none;
+}
+
+@media (min-width: 992px) {
+  .features-sentinel {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .features-arcs .arc-spin {
+    animation: spin 140s linear infinite;
+  }
+
+  .timeline-art .timeline-wave {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: wave 2.2s ease-in-out infinite;
+  }
+
+  @for $i from 1 through 4 {
+    .timeline-art .wave-phase-#{$i} {
+      animation-duration: 1.6s + $i * 0.35s;
+      animation-delay: -$i * 0.45s;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+
+  .features-dark-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .features-dark-inner {
+    padding-inline: calc(var(--gutter) + var(--frame-pad));
+  }
+}
+
+@media (max-width: 479px) {
+  .features-dark-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Call to action
+// ---------------------------------------------------------------------------
+// two heraldic banners hang either side of the call to action
+.cta-inner {
+  position: relative;
+}
+
+.cta-banners {
+  position: absolute;
+  inset: 0 clamp(1.5rem, 7%, 7rem) auto;
+  display: none;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.cta-banner {
+  width: clamp(4.5rem, 6vw, 6rem);
+}
+
+@media (min-width: 1024px) {
+  .cta-banners {
+    display: flex;
+  }
+}
+
+.cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 36rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.cta-text {
+  max-width: 30rem;
+  color: var(--ink-muted);
+}
+
+.cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
